@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>MotorWinding Hubs — Motor Winding & Electrical Engineering Calculators</title>
+<meta name="description" content="Free motor winding and electrical engineering calculators: winding turns & copper weight, SWG / AWG wire gauge converter, 3-phase motor current & breaker sizing, capacitor & power factor, and voltage drop & cable sizing. Includes a 400V motor reference table, practical rewinding guides and FAQs.">
+<meta name="keywords" content="motor winding calculator, copper weight calculator, SWG AWG converter, motor current calculator, breaker size calculator, capacitor calculator, power factor correction, voltage drop calculator, cable sizing, motor rewinding">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://motorwindinghubs.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MotorWinding Hubs">
+<meta property="og:title" content="MotorWinding Hubs — Motor Winding & Electrical Engineering Calculators">
+<meta property="og:description" content="Free, instant calculators for motor rewinding workshops and electricians: winding turns, wire gauge, motor current, capacitors and voltage drop — based on IEC standards for 400V / 230V, 50Hz systems.">
+<meta property="og:url" content="https://motorwindinghubs.github.io/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MotorWinding Hubs — Motor Winding Calculators">
+<meta name="twitter:description" content="Free motor winding, wire gauge, motor current, capacitor and voltage drop calculators with a 400V reference table and practical rewinding guides.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"MotorWinding Hubs","url":"https://motorwindinghubs.github.io/","description":"Free motor winding and electrical engineering calculators for rewinding workshops and field electricians."}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What happens if I change the number of turns per coil?","acceptedAnswer":{"@type":"Answer","text":"Turns set the magnetic flux. Fewer turns raises flux density so the motor draws more no-load current and runs hot. More turns lowers flux and torque. Small changes of ±5% are usually tolerated, but a rewind should match the original turns unless redesigning for a different voltage."}},{"@type":"Question","name":"Can I rewind a copper motor with aluminium wire?","acceptedAnswer":{"@type":"Answer","text":"Yes, but not with the same diameter. Aluminium conducts about 61% as well as copper, so you need roughly 1.28 times the cross-section for the same resistance, which is hard to fit in the same slots."}},{"@type":"Question","name":"From what size should I use star-delta starting?","acceptedAnswer":{"@type":"Answer","text":"As a rule of thumb from about 11 kW (15 HP) upwards, or whenever direct starting would dip the supply voltage enough to disturb other equipment."}},{"@type":"Question","name":"How do I size a run capacitor for a single-phase motor?","acceptedAnswer":{"@type":"Answer","text":"A common starting point is about 70 µF per kW at 230 V / 50 Hz, then fine-tune by measuring the auxiliary winding current."}},{"@type":"Question","name":"Why does voltage drop matter for motors?","acceptedAnswer":{"@type":"Answer","text":"Motor torque falls with the square of the voltage, so a 10% voltage drop costs about 19% of starting torque — enough to stall a loaded pump or compressor at start."}}]}
+</script>
+<style>
+:root{
+  --navy:#0d1b2e; --navy2:#16283f; --orange:#f59e0b; --orange-d:#d97706; --orange-text:#b45309;
+  --bg:#edf1f6; --card:#ffffff; --ink:#16233a; --muted:#5b6b82; --line:#dde4ee; --input:#fbfcfe;
+  --good:#15803d; --bad:#dc2626; --soft:#fff7e8;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0b1220; --card:#131e31; --ink:#e8eef7; --muted:#9db0c8; --line:#263650; --input:#0f1a2c; --soft:#2a2113; --orange-text:#fbbf24; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px}
+a{color:var(--orange-text);text-decoration:none}
+a:hover{text-decoration:underline}
+button,[role="button"],select,summary,input:not([type="checkbox"]){min-height:38px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+/* Header */
+header{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;box-shadow:0 2px 14px rgba(0,0,0,.25)}
+.hbar{display:flex;align-items:center;gap:12px;padding:10px 0}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;cursor:pointer;flex-shrink:0}
+.logo:hover{text-decoration:none}
+.mw{background:var(--orange);color:#1a1206;font-weight:900;font-size:15px;border-radius:7px;padding:7px 8px;letter-spacing:.5px}
+.logo b{font-size:19px;line-height:1.1}
+.logo b span{color:var(--orange)}
+.logo small{display:block;color:#9fb3cc;font-size:11.5px;font-weight:400}
+nav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
+nav a{color:#e6edf7;font-size:14.5px;font-weight:600;padding:9px 11px;border-radius:8px}
+nav a:hover{background:rgba(255,255,255,.1);text-decoration:none}
+.burger{display:none;margin-left:auto;background:none;border:0;color:#fff;font-size:24px;cursor:pointer;padding:6px 10px}
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--navy) 55%,var(--navy2));color:#fff;padding:44px 0 38px}
+.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.15;margin:0 0 14px;max-width:760px}
+.hero h1 span{color:var(--orange)}
+.hero p{color:#c3d2e6;max-width:720px;margin:0 0 18px;font-size:16.5px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{border:1px solid rgba(245,158,11,.55);color:#fcd34d;background:rgba(245,158,11,.08);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600}
+/* Sections */
+section{padding:30px 0 6px}
+h2.sec{font-size:24px;margin:0 0 4px;border-left:4px solid var(--orange);padding-left:10px;line-height:1.25}
+.sub{color:var(--muted);margin:0 0 18px;font-size:15px}
+/* Calculator cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:var(--card);border-radius:12px;border-top:4px solid var(--orange);box-shadow:0 2px 10px rgba(15,35,60,.08);padding:20px;margin-bottom:18px}
+.card.full{grid-column:1/-1}
+.tag{color:var(--orange-text);font-size:11.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+.card h3{margin:3px 0 5px;font-size:19px;line-height:1.3}
+.card .desc{color:var(--muted);font-size:14px;margin:0 0 14px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:13.5px;font-weight:700;margin-bottom:5px}
+.field label span{color:var(--muted);font-weight:400;font-size:12px}
+.field input,.field select{width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:8px;background:var(--input);color:var(--ink);font-size:15px;font-family:inherit}
+.field input:focus,.field select:focus{outline:2px solid var(--orange);border-color:transparent}
+.btn{background:var(--orange);color:#1a1206;border:0;font-weight:800;font-size:15px;padding:10px 20px;border-radius:8px;cursor:pointer;font-family:inherit}
+.btn:hover{background:var(--orange-d);color:#fff}
+.results{display:none;margin-top:16px;border-top:1px dashed var(--line);padding-top:14px}
+.results.show{display:block}
+.results h4{margin:0 0 10px;font-size:15px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.rbox{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+.rbox small{display:block;color:var(--muted);font-size:12px;font-weight:700}
+.rbox b{font-size:17px}
+.formula{font-size:12.5px;color:var(--muted);margin-top:12px}
+.note{font-size:12.5px;color:var(--muted);background:var(--soft);border-radius:8px;padding:9px 12px;margin-top:10px}
+.ok{color:var(--good);font-weight:700}.warn{color:var(--bad);font-weight:700}
+/* Table */
+.twrap{background:var(--card);border-radius:12px;box-shadow:0 2px 10px rgba(15,35,60,.08);overflow:hidden;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--navy);color:#fff;text-align:left;padding:11px 12px;font-size:13px}
+td{padding:10px 12px;border-top:1px solid var(--line)}
+tr:nth-child(even) td{background:rgba(120,140,170,.06)}
+.tnote{font-size:12.5px;color:var(--muted)}
+/* Guides */
+.ggrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.gcard{background:var(--card);border-radius:12px;border-left:4px solid var(--orange);box-shadow:0 2px 10px rgba(15,35,60,.08);padding:18px;display:flex;flex-direction:column}
+.gcard h3{margin:3px 0 7px;font-size:17.5px;line-height:1.3}
+.gcard p{color:var(--muted);font-size:14px;margin:0 0 12px;flex:1}
+.gcard button{align-self:flex-start;background:none;border:0;color:var(--orange-text);font-weight:800;font-size:14px;cursor:pointer;padding:8px 2px;font-family:inherit}
+/* FAQ */
+details{background:var(--card);border-radius:10px;box-shadow:0 2px 8px rgba(15,35,60,.07);margin-bottom:10px;padding:4px 16px}
+summary{cursor:pointer;font-weight:700;font-size:15.5px;padding:10px 0;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--orange-text);font-size:22px;font-weight:800}
+details[open ] summary::after{content:"–"}
+details p{color:var(--muted);font-size:14.5px;margin:0 0 14px}
+/* About / pages */
+.panel{background:var(--card);border-radius:12px;box-shadow:0 2px 10px rgba(15,35,60,.08);padding:22px;margin-bottom:18px}
+.panel p{font-size:15px;color:var(--ink)}
+.panel p.mut{color:var(--muted)}
+.pageview{display:none;padding:30px 0 10px}
+.pageview.show{display:block}
+.pageview h1{font-size:28px;margin:0 0 12px;border-left:4px solid var(--orange);padding-left:10px}
+.pageview h2{font-size:20px;margin:22px 0 6px}
+.pageview p,.pageview li{font-size:15px;color:var(--ink)}
+.pageview .mut{color:var(--muted)}
+/* Guide reader */
+#reader{display:none}
+#reader.show{display:block}
+#reader .body p{font-size:15.5px;margin:0 0 13px}
+.backbtn{background:none;border:1.5px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 16px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px}
+/* Footer */
+footer{background:var(--navy);color:#c3d2e6;margin-top:36px;padding:34px 0 0}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;padding-bottom:22px}
+footer h4{color:#fff;margin:0 0 10px;font-size:15.5px}
+footer p{font-size:13.5px;margin:0 0 8px}
+footer a{color:#c3d2e6;font-size:13.5px;display:block;padding:4px 0}
+footer a:hover{color:var(--orange)}
+.fbot{border-top:1px solid rgba(255,255,255,.12);padding:14px 0;font-size:12.5px;text-align:center;color:#8fa5c0}
+@media(max-width:900px){.ggrid{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){
+  .grid2,.ggrid,.fgrid{grid-template-columns:1fr}
+  .frow{grid-template-columns:1fr 1fr}
+  nav{display:none;position:absolute;top:100%;left:0;right:0;background:var(--navy);flex-direction:column;padding:8px 16px 14px}
+  nav.open{display:flex}
+  .burger{display:block}
+  .twrap{overflow-x:auto}
+  table{min-width:640px}
+}
+@media(max-width:430px){.frow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hbar">
+    <a class="logo" onclick="go('home')" role="button" tabindex="0">
+      <span class="mw">MW</span>
+      <b>MotorWinding <span>Hubs</span><small>motorwindinghubs.github.io</small></b>
+    </a>
+    <button class="burger" id="burger" aria-label="Menu">☰</button>
+    <nav id="nav">
+      <a href="#calculators" onclick="go('home')">Calculators</a>
+      <a href="#reference" onclick="go('home')">Reference Table</a>
+      <a href="#guides" onclick="go('home')">Guides</a>
+      <a href="#faq" onclick="go('home')">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HOME ============ -->
+<div id="view-home">
+  <div class="hero">
+    <div class="wrap">
+      <h1>Motor Winding &amp; Electrical Engineering <span>Calculators</span></h1>
+      <p>Free, instant, browser-based tools for motor rewinding workshops and field electricians: winding turns and copper weight, wire gauge conversion, 3-phase motor current and breaker sizing, capacitor and power factor correction, and voltage drop with cable sizing. Built on IEC standards for 400V / 230V, 50Hz systems.</p>
+      <div class="pills">
+        <span class="pill">5 working calculators</span>
+        <span class="pill">IEC 60034 based</span>
+        <span class="pill">400V / 230V · 50Hz</span>
+        <span class="pill">No sign-up · Works offline after load</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section id="calculators">
+      <h2 class="sec">Engineering Calculators</h2>
+      <p class="sub">Enter your measured values and press Calculate. Every result is computed instantly in your browser — nothing is uploaded anywhere.</p>
+
+      <!-- 1 WINDING -->
+      <div class="card full">
+        <span class="tag">Winding Design</span>
+        <h3>Motor Winding Turns &amp; Copper Weight Calculator</h3>
+        <p class="desc">Estimate the enamelled wire length, weight, resistance and slot fill for a stator rewind from your core and coil measurements.</p>
+        <div class="frow">
+          <div class="field"><label>Stator total slots</label><input type="number" id="w_slots" value="36" min="1"></div>
+          <div class="field"><label>Core stack length L (mm)</label><input type="number" id="w_L" value="100" min="1"></div>
+          <div class="field"><label>Mean coil width W (mm)</label><input type="number" id="w_W" value="80" min="1"></div>
+          <div class="field"><label>Enamel wire diameter d (mm) <span>bare copper</span></label><input type="number" id="w_d" value="1.00" step="0.01" min="0.05"></div>
+          <div class="field"><label>Turns per coil</label><input type="number" id="w_turns" value="20" min="1"></div>
+          <div class="field"><label>Slot usable area (mm²)</label><input type="number" id="w_slotarea" value="50" min="1"></div>
+          <div class="field"><label>Conductor material</label><select id="w_mat"><option value="cu">Copper (Cu)</option><option value="al">Aluminium (Al)</option></select></div>
+          <div class="field"><label>Price per kg <span>(your currency)</span></label><input type="number" id="w_price" value="1500" min="0"></div>
+        </div>
+        <button class="btn" onclick="calcWinding()">Calculate Winding</button>
+        <div class="results" id="w_res">
+          <h4>Winding Results</h4>
+          <div class="rgrid">
+            <div class="rbox"><small>Mean Turn Length (MTL)</small><b id="w_mtl">—</b></div>
+            <div class="rbox"><small>Total Wire Length</small><b id="w_len">—</b></div>
+            <div class="rbox"><small>Total Weight (+5% allowance)</small><b id="w_wt">—</b></div>
+            <div class="rbox"><small>Coil Resistance @ 20°C</small><b id="w_r20">—</b></div>
+            <div class="rbox"><small>Coil Resistance @ 75°C</small><b id="w_r75">—</b></div>
+            <div class="rbox"><small>Slot Fill Factor</small><b id="w_fill">—</b></div>
+            <div class="rbox"><small>Estimated Material Cost</small><b id="w_cost">—</b></div>
+          </div>
+          <p class="formula">Formulas: MTL = 2 × (L + W) · Length = Slots × Turns × MTL · Resistance R = ρ × Length ÷ Area · Fill = (Turns × wire area) ÷ slot area. Copper: ρ = 1.68×10⁻⁸ Ω·m, density 8,960 kg/m³, α = 0.00393/°C. Aluminium: ρ = 2.82×10⁻⁸ Ω·m, density 2,700 kg/m³.</p>
+          <p class="note">Estimate only. Real windings vary with coil shape, insulation build-up and end-winding slack — always weigh a sample coil and check the nameplate data before ordering wire.</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+      <!-- 2 GAUGE -->
+      <div class="card">
+        <span class="tag">Wire Size</span>
+        <h3>SWG / AWG / mm² Wire Gauge Converter</h3>
+        <p class="desc">Convert between British SWG, American AWG, diameter in mm and cross-section in mm², with resistance and a safe current guide.</p>
+        <div class="field"><label>I know this value</label>
+          <select id="g_type"><option value="swg">SWG number</option><option value="awg">AWG number</option><option value="mm">Diameter (mm)</option><option value="mm2">Cross-section (mm²)</option></select></div>
+        <div class="field"><label>Value</label><input type="number" id="g_val" value="18" step="0.01" min="0"></div>
+        <button class="btn" onclick="calcGauge()">Convert</button>
+        <div class="results" id="g_res">
+          <h4>Conversion Results</h4>
+          <div class="rgrid">
+            <div class="rbox"><small>SWG</small><b id="g_swg">—</b></div>
+            <div class="rbox"><small>AWG</small><b id="g_awg">—</b></div>
+            <div class="rbox"><small>Diameter</small><b id="g_mm">—</b></div>
+            <div class="rbox"><small>Cross-Section</small><b id="g_mm2">—</b></div>
+            <div class="rbox"><small>Resistance / km (Cu)</small><b id="g_r">—</b></div>
+            <div class="rbox"><small>Safe Current Guide</small><b id="g_i">—</b></div>
+          </div>
+          <p class="note">Current guide uses about 4 A/mm² for enclosed motor windings — a conservative rule of thumb, not a rating. Always follow the wire manufacturer's data and the applicable wiring code for your installation.</p>
+        </div>
+      </div>
+
+      <!-- 3 MOTOR CURRENT -->
+      <div class="card">
+        <span class="tag">Power Equipment</span>
+        <h3>3-Phase Motor Current &amp; Breaker Calculator</h3>
+        <p class="desc">Rated current, starting current, MCCB, contactor and overload relay setting from motor power, voltage, efficiency and power factor.</p>
+        <div class="frow">
+          <div class="field"><label>Motor power (kW)</label><input type="number" id="m_kw" value="3.7" step="0.1" min="0.1"></div>
+          <div class="field"><label>Supply voltage</label><select id="m_v"><option value="400">3-phase 400 V</option><option value="415">3-phase 415 V</option><option value="380">3-phase 380 V</option><option value="230">1-phase 230 V</option><option value="220">1-phase 220 V</option></select></div>
+          <div class="field"><label>Efficiency η (%)</label><input type="number" id="m_eff" value="85" min="1" max="100"></div>
+          <div class="field"><label>Power factor cos φ</label><input type="number" id="m_pf" value="0.85" step="0.01" min="0.1" max="1"></div>
+        </div>
+        <button class="btn" onclick="calcMotor()">Calculate Current</button>
+        <div class="results" id="m_res">
+          <h4>Motor Protection Results</h4>
+          <div class="rgrid">
+            <div class="rbox"><small>Rated Current In</small><b id="m_in">—</b></div>
+            <div class="rbox"><small>Starting Current (≈6× In)</small><b id="m_start">—</b></div>
+            <div class="rbox"><small>Recommended MCCB</small><b id="m_mccb">—</b></div>
+            <div class="rbox"><small>Contactor (AC-3)</small><b id="m_cont">—</b></div>
+            <div class="rbox"><small>Overload Relay (EOCR)</small><b id="m_eocr">—</b></div>
+            <div class="rbox"><small>Input Power</small><b id="m_pin">—</b></div>
+          </div>
+          <p class="formula">Formula: In = P ÷ (√3 × V × η × cos φ) for 3-phase; In = P ÷ (V × η × cos φ) for single-phase. Starting current is taken as 6 × In for direct-on-line starting. MCCB is the next standard size above 1.25 × In (motor-duty / D-curve).</p>
+        </div>
+      </div>
+
+      <!-- 4 CAPACITOR -->
+      <div class="card">
+        <span class="tag">Capacitor · Power Factor</span>
+        <h3>Capacitor &amp; Power Factor Calculator</h3>
+        <p class="desc">Single-phase run/start capacitor estimates and the 3-phase capacitor bank (kVAr) needed to correct power factor to your target.</p>
+        <div class="frow">
+          <div class="field"><label>Single-phase motor (kW) <span>for capacitor estimate</span></label><input type="number" id="c_kw1" value="1.5" step="0.1" min="0"></div>
+          <div class="field"><label>3-phase load (kW) <span>for PF correction</span></label><input type="number" id="c_kw3" value="15" step="0.1" min="0"></div>
+          <div class="field"><label>Present power factor</label><input type="number" id="c_pf1" value="0.75" step="0.01" min="0.1" max="0.99"></div>
+          <div class="field"><label>Target power factor</label><input type="number" id="c_pf2" value="0.95" step="0.01" min="0.1" max="1"></div>
+        </div>
+        <button class="btn" onclick="calcCap()">Calculate Capacitor</button>
+        <div class="results" id="c_res">
+          <h4>Capacitor Results</h4>
+          <div class="rgrid">
+            <div class="rbox"><small>Run Capacitor (est.)</small><b id="c_run">—</b></div>
+            <div class="rbox"><small>Start Capacitor Range</small><b id="c_start">—</b></div>
+            <div class="rbox"><small>kVAr to Correct PF</small><b id="c_kvar">—</b></div>
+            <div class="rbox"><small>Present φ angle</small><b id="c_ang1">—</b></div>
+            <div class="rbox"><small>Target φ angle</small><b id="c_ang2">—</b></div>
+            <div class="rbox"><small>Current at Present PF (400V)</small><b id="c_cur">—</b></div>
+          </div>
+          <p class="formula">Formulas: kVAr = P × (tan φ₁ − tan φ₂), where φ = arccos(power factor). Run capacitor rule of thumb ≈ 70 µF per kW at 230 V / 50 Hz; start capacitor ≈ 2.5–3 × run value.</p>
+          <p class="note">Capacitor values are estimates — the motor manufacturer's nameplate and winding design always win. A wrong run capacitor overheats the auxiliary winding.</p>
+        </div>
+      </div>
+
+      <!-- 5 VOLTAGE DROP -->
+      <div class="card">
+        <span class="tag">Cable Design</span>
+        <h3>Voltage Drop &amp; Cable Sizing Calculator</h3>
+        <p class="desc">Check the voltage drop along a cable run and find the smallest copper cable size that keeps the drop within the 5% limit.</p>
+        <div class="frow">
+          <div class="field"><label>Cable run length — one way (m)</label><input type="number" id="v_len" value="30" min="1"></div>
+          <div class="field"><label>Load current (A)</label><input type="number" id="v_i" value="20" min="0.1"></div>
+          <div class="field"><label>Supply</label><select id="v_sup"><option value="400-3">3-phase 400 V</option><option value="230-1">1-phase 230 V</option><option value="415-3">3-phase 415 V</option><option value="220-1">1-phase 220 V</option></select></div>
+          <div class="field"><label>Cable size (mm² copper)</label><select id="v_size"><option>1.5</option><option>2.5</option><option selected>4</option><option>6</option><option>10</option><option>16</option><option>25</option><option>35</option><option>50</option><option>70</option><option>95</option><option>120</option></select></div>
+        </div>
+        <button class="btn" onclick="calcDrop()">Calculate Voltage Drop</button>
+        <div class="results" id="v_res">
+          <h4>Voltage Drop Results</h4>
+          <div class="rgrid">
+            <div class="rbox"><small>Voltage Drop</small><b id="v_dv">—</b></div>
+            <div class="rbox"><small>Drop as % of Supply</small><b id="v_pct">—</b></div>
+            <div class="rbox"><small>Voltage at Load</small><b id="v_vload">—</b></div>
+            <div class="rbox"><small>Cable Resistance</small><b id="v_r">—</b></div>
+            <div class="rbox"><small>Suggested Min. Size</small><b id="v_sugg">—</b></div>
+            <div class="rbox"><small>Power Lost in Cable</small><b id="v_loss">—</b></div>
+          </div>
+          <p id="v_verdict" style="font-size:14px;margin:10px 0 0"></p>
+          <p class="formula">Formulas: R = 0.0175 × Length ÷ Area (copper, 20°C). Single-phase: ΔV = 2 × I × R. Three-phase: ΔV = √3 × I × R. Limit used here: 5% of supply voltage for power circuits.</p>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- REFERENCE TABLE -->
+    <section id="reference">
+      <h2 class="sec">3-Phase 400V Motor Reference Table</h2>
+      <p class="sub">Typical values for 4-pole (1,500 RPM) TEFC induction motors at 400 V / 50 Hz. Use them for quick selection — always confirm against the motor nameplate and the cable manufacturer's current ratings.</p>
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Rated Output</th><th>Rated Current In</th><th>Recommended MCCB</th><th>Contactor (AC-3)</th><th>EOCR Setting</th><th>Cable (Cu, mm²)</th><th>Typical Slots</th></tr></thead>
+          <tbody>
+            <tr><td>0.75 kW (1 HP)</td><td>1.9 A</td><td>10 A</td><td>9 A</td><td>2.0 – 2.2 A</td><td>1.5</td><td>24</td></tr>
+            <tr><td>1.5 kW (2 HP)</td><td>3.4 A</td><td>16 A</td><td>9 A</td><td>3.6 – 3.9 A</td><td>1.5</td><td>24</td></tr>
+            <tr><td>2.2 kW (3 HP)</td><td>4.9 A</td><td>16 A</td><td>12 A</td><td>5.1 – 5.6 A</td><td>2.5</td><td>36</td></tr>
+            <tr><td>3.7 kW (5 HP)</td><td>7.8 A</td><td>20 A</td><td>18 A</td><td>8.2 – 9.0 A</td><td>2.5</td><td>36</td></tr>
+            <tr><td>5.5 kW (7.5 HP)</td><td>11.3 A</td><td>32 A</td><td>25 A</td><td>11.9 – 13.0 A</td><td>4</td><td>36</td></tr>
+            <tr><td>7.5 kW (10 HP)</td><td>14.8 A</td><td>32 A</td><td>32 A</td><td>15.5 – 17.0 A</td><td>4</td><td>48</td></tr>
+            <tr><td>11 kW (15 HP)</td><td>21.5 A</td><td>50 A</td><td>40 A</td><td>22.6 – 24.7 A</td><td>6</td><td>48</td></tr>
+            <tr><td>15 kW (20 HP)</td><td>28.5 A</td><td>63 A</td><td>50 A</td><td>29.9 – 32.8 A</td><td>10</td><td>48</td></tr>
+            <tr><td>22 kW (30 HP)</td><td>42 A</td><td>80 A</td><td>65 A</td><td>44.1 – 48.3 A</td><td>16</td><td>48</td></tr>
+            <tr><td>37 kW (50 HP)</td><td>69 A</td><td>125 A</td><td>100 A</td><td>72.5 – 79.4 A</td><td>25</td><td>60</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tnote">Currents are typical for standard-efficiency 4-pole motors (η ≈ 0.80–0.88, cos φ ≈ 0.82–0.86). High-efficiency (IE3/IE4) motors and different pole counts will differ slightly.</p>
+    </section>
+
+    <!-- GUIDES -->
+    <section id="guides">
+      <h2 class="sec">Practical Winding Guides</h2>
+      <p class="sub">Short, field-tested notes for rewinding workshops and maintenance electricians. Open any guide to read it in full.</p>
+      <div id="guideGrid" class="ggrid"></div>
+      <div id="reader" class="panel">
+        <button class="backbtn" onclick="closeGuide()">← All guides</button>
+        <span class="tag" id="r_tag"></span>
+        <h2 id="r_title" style="margin:4px 0 12px;font-size:24px"></h2>
+        <div class="body" id="r_body"></div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <h2 class="sec">Frequently Asked Questions</h2>
+      <p class="sub">Quick answers to the questions winding shops ask most often.</p>
+      <details><summary>What happens if I change the number of turns per coil?</summary><p>Turns set the magnetic flux. Fewer turns than the original design raises the flux density, so the motor draws more no-load current and runs hot. More turns lowers the flux and the torque. Small changes (±5%) are usually tolerated, but a rewind should match the original turns unless you are deliberately redesigning the motor for a different voltage.</p></details>
+      <details><summary>Can I rewind a copper motor with aluminium wire?</summary><p>Yes, but not with the same diameter. Aluminium conducts only about 61% as well as copper, so you need roughly 1.28 times the cross-section (about 1.13 times the diameter) for the same resistance, which is hard to fit in the same slots. Copper remains the standard choice for rewinds where slot space is tight.</p></details>
+      <details><summary>From what size should I use star-delta starting?</summary><p>As a rule of thumb, from about 11 kW (15 HP) upwards, or whenever direct starting would dip the supply voltage enough to disturb other equipment. The exact point depends on your transformer size and supply impedance — check the voltage drop at start with the calculator above before deciding.</p></details>
+      <details><summary>How do I size a run capacitor for a single-phase motor?</summary><p>A common starting point is about 70 µF per kW at 230 V / 50 Hz, then fine-tune by measuring the auxiliary winding current — the correct capacitor makes the main and auxiliary winding currents roughly equal under load. Use the capacitor calculator above for the estimate, and always use a capacitor rated for continuous AC motor duty at the right voltage.</p></details>
+      <details><summary>Why does voltage drop matter for motors?</summary><p>Motor torque falls with the square of the voltage, so a 10% voltage drop costs about 19% of starting torque — enough to stall a loaded pump or compressor at start. Long cable runs also waste energy as heat. Keeping the drop within 5% protects starting performance and efficiency.</p></details>
+      <details><summary>What slot fill factor should I aim for in a rewind?</summary><p>Keep the slot fill factor roughly between 35% and 55%. Below that range you are wasting slot space and copper performance; above it the coils become very hard to insert without damaging the enamel insulation, and heat has less room to escape.</p></details>
+      <details><summary>How do I convert HP to kW for the calculators?</summary><p>Multiply horsepower by 0.746: for example 5 HP ≈ 3.7 kW and 10 HP ≈ 7.5 kW. The reference table above lists both kW and HP for the most common motor sizes.</p></details>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="panel">
+        <h2 class="sec">About MotorWinding Hubs</h2>
+        <p>MotorWinding Hubs is a free reference site for motor rewinding workshops, maintenance electricians and engineering students. The calculators use standard IEC formulas for 400 V / 230 V, 50 Hz systems: IEC 60034 for rotating machines, and the usual copper resistivity and temperature-coefficient values used in electrical engineering practice.</p>
+        <p><strong>Disclaimer:</strong> All results are estimates for guidance only. They do not replace the motor manufacturer's nameplate data, the applicable national wiring regulations, or the judgement of a licensed electrician. Always verify protection settings, cable sizes and capacitor values against the equipment documentation and local codes before energising any machine. MotorWinding Hubs accepts no liability for work carried out on the basis of these calculations.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ============ PRIVACY ============ -->
+<div class="wrap pageview" id="view-privacy">
+  <h1>Privacy Policy</h1>
+  <p class="mut">Last updated: 21 November 2026</p>
+  <p>MotorWinding Hubs (motorwindinghubs.github.io) is a free calculator and reference website. This policy explains what information is — and is not — collected when you use it.</p>
+  <h2>Calculations stay on your device</h2>
+  <p>All five calculators run entirely in your web browser using JavaScript. The values you type are never sent to a server, stored in a database, or shared with anyone. When you close the page, the values are gone.</p>
+  <h2>No accounts, no sign-up</h2>
+  <p>The site has no registration, login, comments or upload features, and we do not ask for your name, email address or any personal information to use the tools.</p>
+  <h2>Cookies and advertising</h2>
+  <p>The site itself does not set tracking cookies. If advertising (such as Google AdSense) is displayed in the future, the advertising provider may use cookies to serve and measure ads, in line with its own privacy policy. You can control cookies at any time in your browser settings.</p>
+  <h2>Analytics</h2>
+  <p>If anonymous, aggregate visit statistics are used to understand which calculators are popular, they do not identify individual visitors and are never sold.</p>
+  <h2>External links</h2>
+  <p>Pages may link to manufacturers, standards bodies or other reference sites. We are not responsible for the privacy practices of external websites.</p>
+  <h2>Changes and contact</h2>
+  <p>We may update this policy as the site develops; the current version will always be posted on this page. Questions about this policy can be sent through the Contact page.</p>
+</div>
+
+<!-- ============ TERMS ============ -->
+<div class="wrap pageview" id="view-terms">
+  <h1>Terms of Use</h1>
+  <p class="mut">Last updated: 21 November 2026</p>
+  <p>By using MotorWinding Hubs you agree to these terms.</p>
+  <h2>Estimates only</h2>
+  <p>Every calculator result, table value and guide on this site is an estimate provided for general guidance and education. Results depend on the accuracy of the values you enter and on standard assumptions (for example 6× starting current for direct-on-line starting and 4 A/mm² as a winding current guide) that may not match your machine.</p>
+  <h2>Professional responsibility</h2>
+  <p>Electrical work must be carried out by qualified persons in accordance with the motor manufacturer's documentation, the equipment nameplate and your national wiring regulations. Always verify protection settings, cable sizes, capacitor values and winding data before energising any machine. MotorWinding Hubs accepts no liability for loss, damage or injury arising from work based on these calculations.</p>
+  <h2>Acceptable use</h2>
+  <p>You may use the calculators and guides freely for personal and workshop use. You may not misrepresent the site's content as certified engineering data, or attempt to disrupt the site.</p>
+  <h2>Content and changes</h2>
+  <p>We work to keep formulas and reference values accurate and in line with IEC practice, but we do not guarantee that every value is error-free or current. Content may change without notice.</p>
+</div>
+
+<!-- ============ CONTACT ============ -->
+<div class="wrap pageview" id="view-contact">
+  <h1>Contact</h1>
+  <p>Found an error in a formula or a table value? Have a suggestion for a new calculator or guide? We welcome corrections from working winders and electricians — accurate workshop feedback is what keeps a reference site useful.</p>
+  <h2>How to reach us</h2>
+  <p>Email: <a href="mailto:contact@motorwindinghubs.github.io">contact@motorwindinghubs.github.io</a></p>
+  <p class="mut">Please include the calculator name, the values you entered and the result you expected, so we can reproduce and check the calculation quickly. We read every message, but as a small free project we cannot provide individual motor design or troubleshooting consultations — for machine-specific advice, please consult the motor manufacturer or a licensed electrician.</p>
+  <h2>Corrections policy</h2>
+  <p>Verified errors in formulas, tables or guides are corrected in the next site update, and significant corrections are noted on the relevant page.</p>
+</div>
+
+<!-- ============ ABOUT PAGE ============ -->
+<div class="wrap pageview" id="view-about">
+  <h1>About MotorWinding Hubs</h1>
+  <p>MotorWinding Hubs is a free reference site for motor rewinding workshops, maintenance electricians and engineering students. It brings together the calculations a winding shop reaches for every day — turns and copper weight, wire gauge conversion, motor current and protection sizing, capacitor selection and power factor correction, and voltage drop with cable sizing — in one fast page that works on a phone at the bench.</p>
+  <h2>Standards and methods</h2>
+  <p>The calculators use standard IEC formulas for 400 V / 230 V, 50 Hz systems: IEC 60034 for rotating machines, copper resistivity 1.68×10⁻⁸ Ω·m and temperature coefficient 0.00393/°C, and the conventional rules of thumb (star-delta from about 11 kW, run capacitors near 70 µF per kW at 230 V) that are stated openly on each calculator so you can see exactly how every result was produced.</p>
+  <h2>Who it is for</h2>
+  <p>Rewinding workshops estimating wire before ordering, field electricians selecting breakers, contactors and cables, and students learning how winding data, current and protection fit together.</p>
+  <p><strong>Disclaimer:</strong> All results are estimates for guidance only and do not replace manufacturer nameplate data, national wiring regulations, or the judgement of a licensed electrician.</p>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <h4>MotorWinding Hubs</h4>
+        <p>Free motor winding and electrical engineering calculators for rewinding workshops and field electricians. IEC 60034 based · 400V / 230V · 50Hz.</p>
+        <p>motorwindinghubs.github.io</p>
+      </div>
+      <div>
+        <h4>Calculators</h4>
+        <a href="#calculators" onclick="go('home')">Winding Turns &amp; Copper Weight</a>
+        <a href="#calculators" onclick="go('home')">SWG / AWG Converter</a>
+        <a href="#calculators" onclick="go('home')">Motor Current &amp; Breaker</a>
+        <a href="#calculators" onclick="go('home')">Capacitor &amp; Power Factor</a>
+        <a href="#calculators" onclick="go('home')">Voltage Drop &amp; Cable Size</a>
+      </div>
+      <div>
+        <h4>Site</h4>
+        <a href="#" onclick="go('privacy');return false;">Privacy Policy</a>
+        <a href="#" onclick="go('terms');return false;">Terms of Use</a>
+        <a href="#" onclick="go('about');return false;">About</a>
+        <a href="#" onclick="go('contact');return false;">Contact</a>
+        <a href="#faq" onclick="go('home')">FAQ</a>
+      </div>
+    </div>
+    <div class="fbot">© 2026 MotorWinding Hubs · All calculations run locally in your browser · Results are estimates — verify with manufacturer data and local wiring regulations.</div>
+  </div>
+</footer>
+
+<script>
+var $=function(id){return document.getElementById(id)};
+function fmt(n,d){if(!isFinite(n))return"—";return n.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d})}
+function num(id){var v=parseFloat($(id).value);return isNaN(v)?0:v}
+function go(view){
+  ['home','privacy','terms','contact','about'].forEach(function(v){ $('view-'+v).style.display = (v===view)?'block':'none'; });
+  $('nav').classList.remove('open');
+  window.scrollTo({top:0});
+}
+$('burger').addEventListener('click',function(){ $('nav').classList.toggle('open'); });
+
+/* ---------- 1. Winding ---------- */
+function calcWinding(){
+  var slots=num('w_slots'),L=num('w_L'),W=num('w_W'),d=num('w_d'),turns=num('w_turns'),slotArea=num('w_slotarea'),price=num('w_price');
+  var mat=$('w_mat').value;
+  var rho = mat==='cu'?1.68e-8:2.82e-8, dens = mat==='cu'?8960:2700, alpha= mat==='cu'?0.00393:0.00403;
+  if(slots<=0||L<=0||W<=0||d<=0||turns<=0){return}
+  var mtl_m = 2*(L+W)/1000;
+  var totalLen = slots*turns*mtl_m;
+  var coilLen = turns*mtl_m;
+  var area_m2 = Math.PI*Math.pow(d/1000,2)/4;
+  var area_mm2 = Math.PI*d*d/4;
+  var weight = totalLen*area_m2*dens*1.05;
+  var r20 = rho*coilLen/area_m2;
+  var r75 = r20*(1+alpha*(75-20));
+  var fill = slotArea>0 ? (turns*area_mm2/slotArea*100) : 0;
+  $('w_mtl').textContent = fmt(mtl_m*1000,0)+' mm';
+  $('w_len').textContent = fmt(totalLen,1)+' m';
+  $('w_wt').textContent = fmt(weight,2)+' kg';
+  $('w_r20').textContent = fmt(r20,2)+' Ω';
+  $('w_r75').textContent = fmt(r75,2)+' Ω';
+  $('w_fill').textContent = fmt(fill,1)+' %';
+  $('w_cost').textContent = fmt(weight*price,0);
+  $('w_res').classList.add('show');
+}
+/* ---------- 2. Gauge ---------- */
+var SWG=[8.23,7.62,7.01,6.35,5.89,5.38,4.88,4.47,4.06,3.66,3.25,2.95,2.64,2.34,2.03,1.83,1.63,1.42,1.22,1.02,0.91,0.81,0.71,0.61,0.56,0.51,0.46,0.42,0.38,0.35,0.32,0.29,0.27,0.25,0.23,0.21,0.19,0.17,0.15,0.13,0.12,0.11,0.10,0.09,0.08,0.07,0.06,0.05,0.04,0.03,0.025];
+function nearestSWG(d){var best=0,bd=1e9;SWG.forEach(function(v,i){var diff=Math.abs(v-d);if(diff<bd){bd=diff;best=i}});return best}
+function calcGauge(){
+  var type=$('g_type').value, val=num('g_val'); if(val<=0)return;
+  var d;
+  if(type==='swg'){ var i=Math.round(val); if(i<0||i>50)return; d=SWG[i]; }
+  else if(type==='awg'){ d=0.127*Math.pow(92,(36-val)/39); }
+  else if(type==='mm'){ d=val; }
+  else { d=2*Math.sqrt(val/Math.PI); }
+  var area=Math.PI*d*d/4;
+  var awg=36-39*(Math.log(d/0.127)/Math.log(92));
+  var rkm=1.68e-8/(area*1e-6)*1000;
+  $('g_swg').textContent=nearestSWG(d);
+  $('g_awg').textContent=fmt(Math.round(awg*10)/10,1);
+  $('g_mm').textContent=fmt(d,3)+' mm';
+  $('g_mm2').textContent=fmt(area,3)+' mm²';
+  $('g_r').textContent=fmt(rkm,2)+' Ω/km';
+  $('g_i').textContent='≈ '+fmt(area*4,1)+' A';
+  $('g_res').classList.add('show');
+}
+/* ---------- 3. Motor ---------- */
+function nextStd(v,list){for(var i=0;i<list.length;i++){if(list[i]>=v)return list[i]}return list[list.length-1]}
+function calcMotor(){
+  var kw=num('m_kw'),V=num('m_v'),eff=num('m_eff')/100,pf=num('m_pf');
+  var sup=$('m_v').value; var is3 = (sup!=='230'&&sup!=='220');
+  if(kw<=0||eff<=0||pf<=0)return;
+  var In = is3 ? kw*1000/(Math.sqrt(3)*V*eff*pf) : kw*1000/(V*eff*pf);
+  $('m_in').textContent=fmt(In,1)+' A';
+  $('m_start').textContent=fmt(In*6,0)+' A';
+  $('m_mccb').textContent=nextStd(In*1.25,[6,10,16,20,25,32,40,50,63,80,100,125,160,200,250])+' A';
+  $('m_cont').textContent=nextStd(In,[9,12,18,25,32,40,50,65,80,95,115,150,185,225])+' A';
+  $('m_eocr').textContent=fmt(In*1.05,1)+' – '+fmt(In*1.15,1)+' A';
+  $('m_pin').textContent=fmt(kw/eff,2)+' kW';
+  $('m_res').classList.add('show');
+}
+/* ---------- 4. Capacitor ---------- */
+function calcCap(){
+  var kw1=num('c_kw1'),kw3=num('c_kw3'),pf1=num('c_pf1'),pf2=num('c_pf2');
+  var run=kw1*70;
+  var kvar=kw3*(Math.tan(Math.acos(pf1))-Math.tan(Math.acos(pf2)));
+  if(kvar<0)kvar=0;
+  var cur=kw3*1000/(Math.sqrt(3)*400*pf1);
+  $('c_run').textContent=fmt(run,0)+' µF';
+  $('c_start').textContent=fmt(run*2.5,0)+' – '+fmt(run*3,0)+' µF';
+  $('c_kvar').textContent=fmt(kvar,2)+' kVAr';
+  $('c_ang1').textContent=fmt(Math.acos(pf1)*180/Math.PI,1)+'°';
+  $('c_ang2').textContent=fmt(Math.acos(pf2)*180/Math.PI,1)+'°';
+  $('c_cur').textContent=fmt(cur,1)+' A';
+  $('c_res').classList.add('show');
+}
+/* ---------- 5. Voltage drop ---------- */
+function calcDrop(){
+  var len=num('v_len'),I=num('v_i'),size=parseFloat($('v_size').value);
+  var parts=$('v_sup').value.split('-'); var V=parseFloat(parts[0]), ph=parts[1];
+  if(len<=0||I<=0)return;
+  function dropFor(s){var R=0.0175*len/s; return ph==='3'? Math.sqrt(3)*I*R : 2*I*R;}
+  var dv=dropFor(size), pct=dv/V*100, R=0.0175*len/size;
+  var sizes=[1.5,2.5,4,6,10,16,25,35,50,70,95,120], sugg='>120';
+  for(var i=0;i<sizes.length;i++){ if(dropFor(sizes[i])/V*100<=5){sugg=sizes[i]+' mm²';break} }
+  var loss = ph==='3'? Math.sqrt(3)*dv*I : dv*I;
+  $('v_dv').textContent=fmt(dv,2)+' V';
+  $('v_pct').innerHTML='<span class="'+(pct<=5?'ok':'warn')+'">'+fmt(pct,2)+' %</span>';
+  $('v_vload').textContent=fmt(V-dv,1)+' V';
+  $('v_r').textContent=fmt(R,3)+' Ω';
+  $('v_sugg').textContent=sugg;
+  $('v_loss').textContent=fmt(loss,0)+' W';
+  $('v_verdict').innerHTML = pct<=5 ? '<span class="ok">✓ Within the 5% limit</span> — this cable size is acceptable for voltage drop (check current rating separately).' : '<span class="warn">✗ Over the 5% limit</span> — use at least '+sugg+' or shorten the run.';
+  $('v_res').classList.add('show');
+}
+/* ---------- Guides ---------- */
+var GUIDES=[
+ {tag:"Winding Design",title:"Stator Winding Design Basics",short:"Count the slots, poles and coils before you strip anything, and record the original turns, wire diameter and connection (star or delta) for every phase. The turns per coil set the magnetic flux: too few turns and the motor draws excess current and overheats; too many and it loses torque. Keep the slot fill factor roughly between 35% and 55% so the coils fit without damaging the enamel.",body:["Before you strip a burnt stator, treat it like evidence. Count the total slots, work out the pole number from the coil grouping, and note how many coils each phase has. Measure the original wire diameter with a micrometer after scraping off the enamel, and record the turns in at least two coils — burnt coils can lose turns, so count a clean one twice.","Write down the connection exactly as found: star or delta, and whether coils in a group are in series or parallel. A motor reconnected delta instead of star on the same supply sees √3 times the phase voltage and will burn again quickly.","The turns per coil set the flux in the core. Too few turns raises flux density toward saturation: no-load current climbs, the iron heats, and efficiency falls. Too many turns weakens the flux and the motor loses torque, slipping more under load. Unless you are deliberately converting the motor to a different voltage, rewind with the original turns and wire size.","Keep the slot fill factor between roughly 35% and 55%. Below that you waste slot space; above it, coils must be forced in and enamel damage becomes likely. If the original wire will not fit at the original turns, the data was probably recorded wrong — recount before changing anything.","Finally, weigh one finished coil and compare it with the calculator estimate above. A small difference is normal end-winding slack; a large one means a counting error somewhere."]},
+ {tag:"Single-Phase Motors",title:"Single-Phase Capacitor Wiring",short:"A single-phase motor needs a start winding and a capacitor to create the rotating field. Identify the main and auxiliary windings with a multimeter first — the auxiliary winding usually has the higher resistance. Wire the run capacitor permanently in series with the auxiliary winding, and the start capacitor (if fitted) through the centrifugal switch so it drops out once the motor reaches about 75% of full speed.",body:["A single-phase stator cannot start on its own: the main winding alone produces a pulsating field, not a rotating one. The auxiliary (start) winding, displaced in the slots and fed through a capacitor, shifts its current in phase and creates the rotating field that gets the rotor moving.","Identify the windings with a multimeter before wiring anything. The auxiliary winding is wound with thinner wire and normally shows the higher resistance; the main winding reads lower. On many motors the common, main and auxiliary leads are marked U1/U2, V1/V2 or by colour — confirm with resistance readings rather than trusting colours on an old motor.","The run capacitor stays permanently in series with the auxiliary winding and is sized for continuous duty — around 70 µF per kW at 230 V is a starting estimate. The start capacitor, where fitted, is a much larger electrolytic unit connected through the centrifugal switch; it must drop out at about 75% of full speed or it will overheat and fail.","If a motor hums but will not start, suspect the start capacitor or a stuck centrifugal switch. If it starts but runs hot and draws excess current, suspect the run capacitor value or a shorted auxiliary winding. Always replace capacitors with the same capacitance and an equal or higher AC voltage rating for motor duty."]},
+ {tag:"Starting Methods",title:"Star-Delta (Y-Δ) Starting",short:"For motors of about 11 kW and above on a weak supply, star-delta starting cuts the starting current to roughly one third of direct-on-line. The motor starts in star, then a timer switches it to delta after a few seconds. Never use star-delta on a motor nameplated for delta-only at your supply voltage, and set the changeover timer so the motor is close to full speed before switching.",body:["Direct-on-line starting draws 6 to 8 times rated current. On a weak supply that dip can dim lights, drop out contactors and disturb other equipment. Star-delta starting connects the windings in star first, so each winding sees only 1/√3 of the line voltage: starting current and starting torque both fall to about one third of their DOL values.","The starter uses three contactors — main, star and delta — with electrical and mechanical interlocking so star and delta can never close together, plus a timer that changes over after a few seconds, once the motor is close to full speed. Switching too early, while the motor is still slow, produces a second current surge almost as large as DOL.","Star-delta only works when the motor's delta rating matches your supply: on a 400 V system the nameplate must read 400 V Δ / 690 V Y, and all six winding ends must be brought out to the terminal box. A motor marked 230 V Δ / 400 V Y must run in star on 400 V and can never be star-delta started on that supply.","Set the overload relay according to where it sits in the circuit: in the delta loop wiring common in many starters it carries phase current (0.58 × line current), so it is set to 0.58 × the nameplate current. Getting this wrong is one of the most common causes of nuisance tripping — or of no protection at all."]},
+ {tag:"Testing & Diagnostics",title:"Insulation Testing (Megger Test)",short:"Before energising a rewound motor, test the insulation resistance between windings and frame with a 500 V megger for low-voltage motors (1,000 V for larger machines). A healthy dry winding reads well above 100 MΩ at room temperature; anything under 1–2 MΩ needs drying or investigation. Always discharge the winding after the test and record the reading with the winding temperature.",body:["The insulation test is the gatekeeper between the winding bench and the supply. Test each winding against the frame, and winding against winding, with a 500 V insulation tester (megger) for low-voltage motors and 1,000 V for larger machines. Isolate any electronics, capacitors and surge devices first — test voltage destroys them.","A healthy, dry low-voltage winding at room temperature reads well above 100 MΩ, and a new rewind should be far higher. Readings are strongly temperature-dependent: insulation resistance roughly halves for every 10°C rise, so always record the winding temperature with the result, otherwise the number cannot be compared later.","Anything under 1–2 MΩ needs investigation before energising: moisture is the usual cause on a motor that has stood in a damp shop or been washed. Dry the winding in an oven at 80–110°C or with a low-voltage current through the coils, and retest as it cools — a rising reading as the motor dries confirms moisture was the problem.","After every test, discharge the winding to the frame for at least as long as you applied the voltage. A charged winding holds enough energy to give a sharp shock and to falsify the next reading."]},
+ {tag:"Drives & Inverters",title:"VFDs and Insulation Stress",short:"A variable frequency drive switches the voltage thousands of times per second, and the fast voltage rise can stress the insulation of the first turns of each coil — especially on older motors and long cable runs. Use inverter-rated enamel wire, keep motor cables short, and consider a dv/dt filter or output reactor when the cable exceeds 20–30 metres. At low speeds the shaft fan moves less air, so watch the temperature.",body:["A variable frequency drive does not produce a clean sine wave: it switches the DC bus thousands of times per second, and each pulse travels down the motor cable and partially reflects at the motor terminals. With long cables the reflected wave can nearly double the voltage at the first turns of the first coil, which is exactly where VFD-fed motors usually fail.","When rewinding a motor that will run on a drive, use inverter-rated (corona-resistant) enamel wire, reinforce the first-coil insulation and phase separators, and vacuum-pressure impregnation if available. These steps cost little at rewind time and greatly extend winding life on PWM supplies.","Keep motor cables as short as practical. Beyond roughly 20–30 metres, fit a dv/dt filter or an output reactor at the drive to slow the pulse edges. Also set the drive's switching frequency and motor parameters (rated current, thermal model) correctly, and enable the drive's motor thermal protection.","Remember cooling: the shaft-mounted fan moves air in proportion to speed. A motor held at low speed under heavy load on a drive can overheat even at rated current — for constant-torque low-speed duty, fit a separately powered cooling fan and monitor winding temperature."]},
+ {tag:"Maintenance",title:"Bearing Care and Greasing",short:"More than half of all motor failures start at the bearings. Listen for a rough or growling sound, check for excess vibration, and feel the bearing housing temperature during a run. Grease sparingly and only with the specified type — over-greasing overheats the bearing just as surely as running it dry. Replace bearings in pairs, and never hammer a new bearing onto the shaft through its outer race.",body:["Industry surveys consistently attribute more than half of motor failures to the bearings. The good news is that bearings announce trouble early: a rough, growling or whistling sound, rising vibration, and a bearing housing that runs hotter than its twin at the other end of the motor.","Grease is a measured dose, not a fill. For regreasable bearings, add the specified type and quantity only — over-greasing churns, overheats and blows seals just as surely as running dry, and excess grease that migrates into the winding accelerates insulation ageing. Never mix grease types (for example lithium and polyurea) unless the manufacturer confirms compatibility.","When replacing bearings, replace them in pairs, press or heat-fit them on the inner race only, and never drive a bearing onto the shaft with hammer blows through the outer race — the impact dents the raceways (brinelling) and the new bearing starts life already damaged.","Record the bearing numbers from the old bearings before ordering (for example 6205-2Z or 6308-C3). Motors commonly need C3 internal clearance to allow for thermal expansion and interference fits; fitting a standard-clearance bearing where C3 is specified can cause early seizure."]}
+];
+function renderGuides(){
+  var h='';
+  GUIDES.forEach(function(g,i){
+    h+='<article class="gcard"><span class="tag">'+g.tag+'</span><h3>'+g.title+'</h3><p>'+g.short+'</p><button onclick="openGuide('+i+')">Read full guide →</button></article>';
+  });
+  $('guideGrid').innerHTML=h;
+}
+function openGuide(i){
+  var g=GUIDES[i];
+  $('r_tag').textContent=g.tag; $('r_title').textContent=g.title;
+  $('r_body').innerHTML=g.body.map(function(p){return '<p>'+p+'</p>'}).join('');
+  $('guideGrid').style.display='none'; $('reader').classList.add('show');
+  $('reader').scrollIntoView({behavior:'smooth'});
+}
+function closeGuide(){ $('reader').classList.remove('show'); $('guideGrid').style.display='grid'; }
+renderGuides();
+</script>
+</body>
+</html>

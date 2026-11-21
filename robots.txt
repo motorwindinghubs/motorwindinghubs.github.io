@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://motorwindinghubs.github.io/sitemap.xml
