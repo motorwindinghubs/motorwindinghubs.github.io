@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>MotorWinding Hubs — 전동기 권선 턴수·동선 중량 계산기 &amp; 전기 엔지니어링 계산기</title>
+<meta name="description" content="전동기 권선 턴수·동선 중량 계산기, SWG·AWG·SQ(mm²) 규격 변환기, 3상 전류·차단기(MCCB) 선정, 콘덴서(μF)·역률 계산기, KEC 전압강하 계산기까지. KS C IEC 60034 기준 3상 380V·단상 220V 60Hz 무료 엔지니어링 계산기와 380V 표준 조견표, 실무 권선 가이드를 제공합니다.">
+<meta name="keywords" content="전동기 권선 계산기, 권선 턴수 계산기, 동선 중량 계산기, SWG AWG SQ 변환, 3상 전류 계산기, 차단기 선정, MCCB, EOCR, 콘덴서 계산기, 역률 개선, 전압강하 계산기, KEC, KS C IEC 60034, 모터 리와인딩">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://motorwindinghubs.github.io/">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Y66DWQB5B"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8Y66DWQB5B');
+</script>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MotorWindingHubs">
+<meta property="og:title" content="MotorWinding Hubs — 전동기 권선 턴수·동선 중량 계산기">
+<meta property="og:description" content="KS C IEC 60034 · KEC 기준 3상 380V·단상 220V 60Hz 전동기 권선, 전류·차단기, 콘덴서, 전압강하 무료 엔지니어링 계산기와 380V 표준 조견표.">
+<meta property="og:url" content="https://motorwindinghubs.github.io/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MotorWinding Hubs — 전동기 권선 계산기">
+<meta name="twitter:description" content="권선 턴수·동선 중량, SWG·AWG·SQ 변환, 3상 전류·차단기, 콘덴서·역률, KEC 전압강하 계산기와 실무 권선 가이드.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"MotorWindingHubs","url":"https://motorwindinghubs.github.io/","inLanguage":"ko","description":"전동기 재권선 작업장과 현장 전기기술자를 위한 무료 전동기 권선·전기 엔지니어링 계산기. KS C IEC 60034 및 한국전기설비규정(KEC) 기준."}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"코일당 턴수를 바꾸면 어떻게 되나요?","acceptedAnswer":{"@type":"Answer","text":"턴수가 자속을 결정합니다. 원래 설계보다 턴수가 적으면 자속밀도가 올라가 전동기가 무부하전류를 더 끌어오고 과열됩니다. 턴수가 많으면 자속과 토크가 떨어집니다. 작은 변경(±5%)은 대개 허용되지만, 다른 전압용으로 의도적으로 재설계하는 경우가 아니라면 재권선은 원래 턴수와 일치시켜야 합니다."}},{"@type":"Question","name":"동선 전동기를 알루미늄선으로 재권선할 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"가능하지만 같은 직경으로는 안 됩니다. 알루미늄의 도전율은 동의 약 61%이므로 같은 저항을 얻으려면 단면적이 약 1.28배 필요하고, 같은 슬롯에 넣기가 어렵습니다."}},{"@type":"Question","name":"어느 크기부터 스타-델타 기동을 써야 하나요?","acceptedAnswer":{"@type":"Answer","text":"경험칙으로는 약 11kW(15HP) 이상부터, 또는 직입 기동 시 전압 강하가 다른 장비를 방해할 정도일 때입니다."}},{"@type":"Question","name":"단상 전동기의 운전 콘덴서는 어떻게 선정하나요?","acceptedAnswer":{"@type":"Answer","text":"단상 220V 60Hz 기준 약 58 µF/kW가 일반적인 출발점이며, 이후 보조권선 전류를 측정해 미세 조정합니다."}},{"@type":"Question","name":"전동기에서 전압강하가 왜 중요한가요?","acceptedAnswer":{"@type":"Answer","text":"전동기 토크는 전압의 제곱에 비례해 떨어지므로 전압이 10% 떨어지면 기동토크가 약 19% 사라져, 부하가 걸린 펌프나 압축기가 기동 중에 멈출 수 있습니다."}}]}
+</script>
+<style>
+:root{
+  --navy:#0d1b2e; --navy2:#16283f; --orange:#f59e0b; --orange-d:#d97706; --orange-text:#b45309;
+  --bg:#edf1f6; --card:#ffffff; --ink:#16233a; --muted:#5b6b82; --line:#dde4ee; --input:#fbfcfe;
+  --good:#15803d; --bad:#dc2626; --soft:#fff7e8;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0b1220; --card:#131e31; --ink:#e8eef7; --muted:#9db0c8; --line:#263650; --input:#0f1a2c; --soft:#2a2113; --orange-text:#fbbf24; }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans KR","Malgun Gothic","Apple SD Gothic Neo","Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px}
+a{color:var(--orange-text);text-decoration:none}
+a:hover{text-decoration:underline}
+button,[role="button"],select,summary,input:not([type="checkbox"]){min-height:38px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+/* Header */
+header{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;box-shadow:0 2px 14px rgba(0,0,0,.25)}
+.hbar{display:flex;align-items:center;gap:12px;padding:10px 0}
+.logo{display:flex;align-items:center;gap:10px;color:#fff;cursor:pointer;flex-shrink:0}
+.logo:hover{text-decoration:none}
+.mw{background:var(--orange);color:#1a1206;font-weight:900;font-size:15px;border-radius:7px;padding:7px 8px;letter-spacing:.5px}
+.logo b{font-size:19px;line-height:1.1}
+.logo b span{color:var(--orange)}
+.logo small{display:block;color:#9fb3cc;font-size:11.5px;font-weight:400}
+nav{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
+nav a{color:#e6edf7;font-size:14.5px;font-weight:600;padding:9px 11px;border-radius:8px}
+nav a:hover{background:rgba(255,255,255,.1);text-decoration:none}
+.burger{display:none;margin-left:auto;background:none;border:0;color:#fff;font-size:24px;cursor:pointer;padding:6px 10px}
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--navy) 55%,var(--navy2));color:#fff;padding:44px 0 38px}
+.hero h1{font-size:clamp(28px,5vw,44px);line-height:1.25;margin:0 0 14px;max-width:820px}
+.hero h1 span{color:var(--orange)}
+.hero p{color:#c3d2e6;max-width:760px;margin:0 0 18px;font-size:16.5px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{border:1px solid rgba(245,158,11,.55);color:#fcd34d;background:rgba(245,158,11,.08);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600}
+/* Sections */
+section{padding:30px 0 6px}
+h2.sec{font-size:24px;margin:0 0 4px;border-left:4px solid var(--orange);padding-left:10px;line-height:1.3}
+.sub{color:var(--muted);margin:0 0 18px;font-size:15px}
+/* Calculator cards */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:var(--card);border-radius:12px;border-top:4px solid var(--orange);box-shadow:0 2px 10px rgba(15,35,60,.08);padding:20px;margin-bottom:18px}
+.card.full{grid-column:1/-1}
+.tag{color:var(--orange-text);font-size:11.5px;font-weight:800;letter-spacing:1.2px}
+.card h3{margin:3px 0 5px;font-size:19px;line-height:1.3}
+.card .desc{color:var(--muted);font-size:14px;margin:0 0 14px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:13.5px;font-weight:700;margin-bottom:5px}
+.field label span{color:var(--muted);font-weight:400;font-size:12px}
+.field input,.field select{width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:8px;background:var(--input);color:var(--ink);font-size:15px;font-family:inherit}
+.field input:focus,.field select:focus{outline:2px solid var(--orange);border-color:transparent}
+.btn{background:var(--orange);color:#1a1206;border:0;font-weight:800;font-size:15px;padding:10px 20px;border-radius:8px;cursor:pointer;font-family:inherit}
+.btn:hover{background:var(--orange-d);color:#fff}
+.results{display:none;margin-top:16px;border-top:1px dashed var(--line);padding-top:14px}
+.results.show{display:block}
+.results h4{margin:0 0 10px;font-size:15px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.rbox{background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+.rbox small{display:block;color:var(--muted);font-size:12px;font-weight:700}
+.rbox b{font-size:17px}
+.formula{font-size:12.5px;color:var(--muted);margin-top:12px}
+.note{font-size:12.5px;color:var(--muted);background:var(--soft);border-radius:8px;padding:9px 12px;margin-top:10px}
+.ok{color:var(--good);font-weight:700}.warn{color:var(--bad);font-weight:700}
+/* Table */
+.twrap{background:var(--card);border-radius:12px;box-shadow:0 2px 10px rgba(15,35,60,.08);overflow:hidden;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--navy);color:#fff;text-align:left;padding:11px 12px;font-size:13px}
+td{padding:10px 12px;border-top:1px solid var(--line)}
+tr:nth-child(even) td{background:rgba(120,140,170,.06)}
+.tnote{font-size:12.5px;color:var(--muted)}
+/* Process flow diagram */
+.flowwrap{background:var(--card);border-radius:12px;box-shadow:0 2px 10px rgba(15,35,60,.08);padding:18px;margin-top:14px}
+.flow{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap}
+.fbox{flex:1 1 200px;border:1.5px solid var(--line);border-radius:10px;padding:12px 10px;text-align:center;background:var(--input)}
+.fbox b{display:block;font-size:15px;margin-bottom:3px}
+.fbox small{display:block;color:var(--muted);font-size:12.5px;line-height:1.5}
+.farrow{display:flex;align-items:center;justify-content:center;color:var(--orange-text);font-weight:900;font-size:18px;flex:0 0 auto}
+.fcap{text-align:center;font-size:12.5px;color:var(--muted);margin:12px 0 0}
+/* Guides */
+.ggrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.gcard{background:var(--card);border-radius:12px;border-left:4px solid var(--orange);box-shadow:0 2px 10px rgba(15,35,60,.08);padding:18px;display:flex;flex-direction:column}
+.gcard h3{margin:3px 0 7px;font-size:17.5px;line-height:1.3}
+.gcard p{color:var(--muted);font-size:14px;margin:0 0 12px;flex:1}
+.gcard button{align-self:flex-start;background:none;border:0;color:var(--orange-text);font-weight:800;font-size:14px;cursor:pointer;padding:8px 2px;font-family:inherit}
+/* FAQ */
+details{background:var(--card);border-radius:10px;box-shadow:0 2px 8px rgba(15,35,60,.07);margin-bottom:10px;padding:4px 16px}
+summary{cursor:pointer;font-weight:700;font-size:15.5px;padding:10px 0;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--orange-text);font-size:22px;font-weight:800}
+details[open ] summary::after{content:"–"}
+details p{color:var(--muted);font-size:14.5px;margin:0 0 14px}
+/* About / pages */
+.panel{background:var(--card);border-radius:12px;box-shadow:0 2px 10px rgba(15,35,60,.08);padding:22px;margin-bottom:18px}
+.panel p{font-size:15px;color:var(--ink)}
+.panel p.mut{color:var(--muted)}
+.pageview{display:none;padding:30px 0 10px}
+.pageview.show{display:block}
+.pageview h1{font-size:28px;margin:0 0 12px;border-left:4px solid var(--orange);padding-left:10px}
+.pageview h2{font-size:20px;margin:22px 0 6px}
+.pageview p,.pageview li{font-size:15px;color:var(--ink)}
+.pageview .mut{color:var(--muted)}
+/* Guide reader */
+#reader{display:none}
+#reader.show{display:block}
+#reader .body p{font-size:15.5px;margin:0 0 13px}
+.backbtn{background:none;border:1.5px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 16px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:14px}
+/* Footer */
+footer{background:var(--navy);color:#c3d2e6;margin-top:36px;padding:34px 0 0}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;padding-bottom:22px}
+footer h4{color:#fff;margin:0 0 10px;font-size:15.5px}
+footer p{font-size:13.5px;margin:0 0 8px}
+footer a{color:#c3d2e6;font-size:13.5px;display:block;padding:4px 0}
+footer a:hover{color:var(--orange)}
+.fbot{border-top:1px solid rgba(255,255,255,.12);padding:14px 0;font-size:12.5px;text-align:center;color:#8fa5c0}
+@media(max-width:900px){.ggrid{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){
+  .grid2,.ggrid,.fgrid{grid-template-columns:1fr}
+  .frow{grid-template-columns:1fr 1fr}
+  nav{display:none;position:absolute;top:100%;left:0;right:0;background:var(--navy);flex-direction:column;padding:8px 16px 14px}
+  nav.open{display:flex}
+  .burger{display:block}
+  .twrap{overflow-x:auto}
+  table{min-width:640px}
+  .farrow{transform:rotate(90deg);width:100%;padding:2px 0}
+}
+@media(max-width:430px){.frow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap hbar">
+    <a class="logo" onclick="go('home')" role="button" tabindex="0">
+      <span class="mw">MW</span>
+      <b>MotorWinding <span>Hubs</span><small>KS C IEC 60034 · KEC 전동기 권선 &amp; 동력 설비 엔지니어링 허브</small></b>
+    </a>
+    <button class="burger" id="burger" aria-label="메뉴">☰</button>
+    <nav id="nav">
+      <a href="#calculators" onclick="go('home')">엔지니어링 계산기(5종)</a>
+      <a href="#winding" onclick="go('home')">권선·턴수 계산기</a>
+      <a href="#reference" onclick="go('home')">380V 조견표</a>
+      <a href="#guides" onclick="go('home')">실무 기술 가이드</a>
+      <a href="#faq" onclick="go('home')">자주 묻는 질문</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HOME ============ -->
+<div id="view-home">
+  <div class="hero">
+    <div class="wrap">
+      <span class="pill" style="display:inline-block;margin-bottom:16px">KS C IEC 60034 · 한국전기설비규정(KEC) 표준 엔지니어링 플랫폼</span>
+      <h1>전동기 권선 턴수·동선 중량 계산기 &amp; <span>산업용 동력 설비</span> 기술 허브</h1>
+      <p>3상 380V·단상 220V 유도전동기의 코일 권선 설계, SWG·AWG·SQ(mm²) 에나멜선 규격 변환, 정격전류·차단기(MCCB)·EOCR 선정, KEC 전압강하 계산까지 — 한국 현장에서 즉시 수행할 수 있는 무료 엔지니어링 계산기를 제공합니다.</p>
+      <div class="pills">
+        <span class="pill">✓ 5종 실시간 엔지니어링 계산기</span>
+        <span class="pill">✓ KS C IEC 60034 기준</span>
+        <span class="pill">✓ 3상 380V · 단상 220V · 60Hz</span>
+        <span class="pill">✓ 회원가입 없이 무료</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section id="calculators">
+      <h2 class="sec">실무 전기·모터 엔지니어링 계산기 (5종)</h2>
+      <p class="sub">현장 계측값과 모터 명판 데이터를 입력하면 KS 및 KEC 공식에 따라 즉시 결과를 산출합니다. 모든 계산은 브라우저 안에서만 수행되며, 입력값은 어디에도 전송되지 않습니다.</p>
+
+      <!-- 1 WINDING -->
+      <div class="card full" id="winding">
+        <span class="tag">KS C IEC 60034-1 · 권선 설계 유틸리티</span>
+        <h3>전동기 코일 권선 턴수·동선 중량·저항 계산기</h3>
+        <p class="desc">현장 리와인딩(재권선) 작업 전 슬롯 규격과 선경(SWG/mm)을 입력하여 소요 동선 중량과 코일 총 저항을 검증하세요.</p>
+        <div class="frow">
+          <div class="field"><label>표준 전동기 프리셋 선택</label>
+            <select id="w_preset" onchange="applyPreset()">
+              <option value="custom">직접 입력</option>
+              <option value="p1">단상 220V 0.75kW (1HP)</option>
+              <option value="p2" selected>3상 380V 2.2kW (3HP) 4극</option>
+              <option value="p3">3상 380V 5.5kW (7.5HP) 4극</option>
+              <option value="p4">3상 380V 11kW (15HP) 4극</option>
+            </select></div>
+          <div class="field"><label>스테이터 총 슬롯 수 (Slots)</label><input type="number" id="w_slots" value="36" min="1"></div>
+          <div class="field"><label>코어 적층 길이 L (mm)</label><input type="number" id="w_L" value="115" min="1"></div>
+          <div class="field"><label>평균 코일 폭 W (mm)</label><input type="number" id="w_W" value="88" min="1"></div>
+          <div class="field"><label>주권선 에나멜선 직경 d (mm) <span>동선 기준</span></label><input type="number" id="w_d" value="0.95" step="0.01" min="0.05"></div>
+          <div class="field"><label>슬롯당 코일 턴수 (Turns/Coil)</label><input type="number" id="w_turns" value="48" min="1"></div>
+          <div class="field"><label>슬롯 유효 단면적 (mm²)</label><input type="number" id="w_slotarea" value="92" min="1"></div>
+          <div class="field"><label>권선 도체 재질</label><select id="w_mat"><option value="cu">전기동 (순동 PEW/AIW)</option><option value="al">알루미늄 (Al)</option></select></div>
+          <div class="field"><label>도체 kg당 단가 (원/kg)</label><input type="number" id="w_price" value="18500" min="0"></div>
+        </div>
+        <button class="btn" onclick="calcWinding()">권선 데이터 정밀 계산하기</button>
+        <div class="results" id="w_res">
+          <h4>실시간 권선 산출 결과 (KS C IEC 60034 기준)</h4>
+          <div class="rgrid">
+            <div class="rbox"><small>1턴 평균 길이 (MTL)</small><b id="w_mtl">—</b></div>
+            <div class="rbox"><small>총 권선 소요 길이</small><b id="w_len">—</b></div>
+            <div class="rbox"><small>총 권선 중량 (여유율 5% 포함)</small><b id="w_wt">—</b></div>
+            <div class="rbox"><small>코일 총 저항 (20°C)</small><b id="w_r20">—</b></div>
+            <div class="rbox"><small>코일 총 저항 (75°C)</small><b id="w_r75">—</b></div>
+            <div class="rbox"><small>슬롯 점적률 (Fill Factor)</small><b id="w_fill">—</b></div>
+            <div class="rbox"><small>예상 자재 비용</small><b id="w_cost">—</b></div>
+          </div>
+          <p class="formula">계산식: MTL = 2 × (L + W) · 총 길이 = 슬롯 수 × 턴수 × MTL · 저항 R = ρ × 길이 ÷ 단면적 · 점적률 = (턴수 × 선 단면적) ÷ 슬롯 유효 단면적. 동: ρ = 1.68×10⁻⁸ Ω·m, 밀도 8,960 kg/m³, 온도계수 α = 0.00393/°C. 알루미늄: ρ = 2.82×10⁻⁸ Ω·m, 밀도 2,700 kg/m³.</p>
+          <p class="note">본 결과는 추정치입니다. 실제 권선은 코일 형상, 절연 두께, 엔드턴 여유에 따라 달라지므로, 선재 주문 전 샘플 코일 1개를 제작해 실측 중량과 명판 데이터를 반드시 확인하세요.</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+      <!-- 2 GAUGE -->
+      <div class="card">
+        <span class="tag">권선 규격</span>
+        <h3>SWG·AWG·SQ 규격 변환기</h3>
+        <p class="desc">영국 표준(SWG), 미국 표준(AWG), 밀리미터(mm) 직경과 단면적 SQ(mm²)를 상호 변환하고, 동선 저항과 허용전류 가이드를 함께 제공합니다.</p>
+        <div class="field"><label>기준값 종류</label>
+          <select id="g_type"><option value="swg">SWG 번호</option><option value="awg">AWG 번호</option><option value="mm">직경 (mm)</option><option value="mm2">단면적 (mm² · SQ)</option></select></div>
+        <div class="field"><label>값</label><input type="number" id="g_val" value="18" step="0.01" min="0"></div>
+        <button class="btn" onclick="calcGauge()">변환하기</button>
+        <div class="results" id="g_res">
+          <h4>변환 결과</h4>
+          <div class="rgrid">
+            <div class="rbox"><small>SWG</small><b id="g_swg">—</b></div>
+            <div class="rbox"><small>AWG</small><b id="g_awg">—</b></div>
+            <div class="rbox"><small>직경</small><b id="g_mm">—</b></div>
+            <div class="rbox"><small>단면적 (SQ)</small><b id="g_mm2">—</b></div>
+            <div class="rbox"><small>동선 저항 / km</small><b id="g_r">—</b></div>
+            <div class="rbox"><small>허용전류 가이드</small><b id="g_i">—</b></div>
+          </div>
+          <p class="note">허용전류 가이드는 전동기 권선 내부 기준 약 4 A/mm²의 보수적인 경험값이며 정격이 아닙니다. 실제 적용 시에는 선재 제조사 데이터와 해당 설비의 전기설비규정(KEC)을 따르세요.</p>
+        </div>
+      </div>
+
+      <!-- 3 MOTOR CURRENT -->
+      <div class="card">
+        <span class="tag">동력 설비</span>
+        <h3>3상 전류·차단기 계산기</h3>
+        <p class="desc">모터 출력, 전압, 효율, 역률로부터 정격전류, 기동전류, 권장 MCCB, 전자접촉기(MC), 과부하 계전기(EOCR) 세팅 범위를 산출합니다.</p>
+        <div class="frow">
+          <div class="field"><label>전동기 출력 (kW)</label><input type="number" id="m_kw" value="2.2" step="0.1" min="0.1"></div>
+          <div class="field"><label>공급 전압</label><select id="m_v"><option value="380" selected>3상 380 V</option><option value="440">3상 440 V</option><option value="220">단상 220 V</option></select></div>
+          <div class="field"><label>효율 η (%)</label><input type="number" id="m_eff" value="85" min="1" max="100"></div>
+          <div class="field"><label>역률 cos φ</label><input type="number" id="m_pf" value="0.85" step="0.01" min="0.1" max="1"></div>
+        </div>
+        <button class="btn" onclick="calcMotor()">전류·차단기 계산하기</button>
+        <div class="results" id="m_res">
+          <h4>동력 설비 산출 결과</h4>
+          <div class="rgrid">
+            <div class="rbox"><small>정격전류 (In)</small><b id="m_in">—</b></div>
+            <div class="rbox"><small>기동전류 (약 6 × In)</small><b id="m_start">—</b></div>
+            <div class="rbox"><small>권장 MCCB</small><b id="m_mccb">—</b></div>
+            <div class="rbox"><small>전자접촉기 (MC · AC-3)</small><b id="m_cont">—</b></div>
+            <div class="rbox"><small>과부하 계전기 (EOCR)</small><b id="m_eocr">—</b></div>
+            <div class="rbox"><small>입력 전력</small><b id="m_pin">—</b></div>
+          </div>
+          <p class="formula">계산식: 3상 In = P ÷ (√3 × V × η × cos φ), 단상 In = P ÷ (V × η × cos φ). 기동전류는 직입 기동 기준 6 × In으로 산정했습니다. MCCB는 1.25 × In을 초과하는 다음 표준 정격을 선정합니다.</p>
+        </div>
+      </div>
+
+      <!-- 4 CAPACITOR -->
+      <div class="card">
+        <span class="tag">콘덴서·역률</span>
+        <h3>콘덴서(μF)·역률 계산기</h3>
+        <p class="desc">단상 220V 60Hz 전동기의 운전·기동 콘덴서 용량 추정과, 목표 역률 개선에 필요한 3상 콘덴서 뱅크 용량(kVAr)을 계산합니다.</p>
+        <div class="frow">
+          <div class="field"><label>단상 전동기 (kW) <span>콘덴서 추정용</span></label><input type="number" id="c_kw1" value="1.5" step="0.1" min="0"></div>
+          <div class="field"><label>3상 부하 (kW) <span>역률 개선용</span></label><input type="number" id="c_kw3" value="15" step="0.1" min="0"></div>
+          <div class="field"><label>현재 역률</label><input type="number" id="c_pf1" value="0.75" step="0.01" min="0.1" max="0.99"></div>
+          <div class="field"><label>목표 역률</label><input type="number" id="c_pf2" value="0.95" step="0.01" min="0.1" max="1"></div>
+        </div>
+        <button class="btn" onclick="calcCap()">콘덴서 계산하기</button>
+        <div class="results" id="c_res">
+          <h4>콘덴서 산출 결과</h4>
+          <div class="rgrid">
+            <div class="rbox"><small>운전 콘덴서 (추정)</small><b id="c_run">—</b></div>
+            <div class="rbox"><small>기동 콘덴서 범위</small><b id="c_start">—</b></div>
+            <div class="rbox"><small>역률 개선 소요 kVAr</small><b id="c_kvar">—</b></div>
+            <div class="rbox"><small>현재 역률각 φ₁</small><b id="c_ang1">—</b></div>
+            <div class="rbox"><small>목표 역률각 φ₂</small><b id="c_ang2">—</b></div>
+            <div class="rbox"><small>현재 역률 시 전류 (380V)</small><b id="c_cur">—</b></div>
+          </div>
+          <p class="formula">계산식: kVAr = P × (tan φ₁ − tan φ₂), φ = arccos(역률). 운전 콘덴서는 단상 220V 60Hz 기준 약 58 µF/kW, 기동 콘덴서는 운전 콘덴서의 약 2.5~3배를 경험값으로 적용했습니다.</p>
+          <p class="note">콘덴서 용량은 추정치이며, 전동기 제조사의 명판과 권선 설계가 항상 우선합니다. 운전 콘덴서 용량이 맞지 않으면 보조권선이 과열됩니다.</p>
+        </div>
+      </div>
+
+      <!-- 5 VOLTAGE DROP -->
+      <div class="card">
+        <span class="tag">간선 설계</span>
+        <h3>KEC 전압강하·간선 계산기</h3>
+        <p class="desc">한국전기설비규정(KEC)에 의거하여 배선 거리(m), 부하 전류(A), 전원 방식(단상 220V / 3상 380V)에 따른 전압강하(V, %)와 최소 적합 전선 단면적(SQ, mm²)을 계산합니다.</p>
+        <div class="frow">
+          <div class="field"><label>배선 거리 — 편도 (m)</label><input type="number" id="v_len" value="30" min="1"></div>
+          <div class="field"><label>부하 전류 (A)</label><input type="number" id="v_i" value="20" min="0.1"></div>
+          <div class="field"><label>공급 전원</label><select id="v_sup"><option value="380-3" selected>3상 380 V</option><option value="220-1">단상 220 V</option><option value="440-3">3상 440 V</option></select></div>
+          <div class="field"><label>케이블 굵기 (동, SQ)</label><select id="v_size"><option>1.5</option><option>2.5</option><option selected>4</option><option>6</option><option>10</option><option>16</option><option>25</option><option>35</option><option>50</option><option>70</option><option>95</option><option>120</option></select></div>
+        </div>
+        <button class="btn" onclick="calcDrop()">전압강하 계산하기</button>
+        <div class="results" id="v_res">
+          <h4>전압강하 산출 결과</h4>
+          <div class="rgrid">
+            <div class="rbox"><small>전압강하</small><b id="v_dv">—</b></div>
+            <div class="rbox"><small>전압강하율</small><b id="v_pct">—</b></div>
+            <div class="rbox"><small>부하 측 전압</small><b id="v_vload">—</b></div>
+            <div class="rbox"><small>케이블 저항</small><b id="v_r">—</b></div>
+            <div class="rbox"><small>권장 최소 굵기</small><b id="v_sugg">—</b></div>
+            <div class="rbox"><small>케이블 손실 전력</small><b id="v_loss">—</b></div>
+          </div>
+          <p id="v_verdict" style="font-size:14px;margin:10px 0 0"></p>
+          <p class="formula">계산식: R = 0.0175 × 거리 ÷ 단면적 (동, 20°C). 단상: ΔV = 2 × I × R. 3상: ΔV = √3 × I × R. 판정 기준은 동력 회로 전압강하 5% 이내입니다.</p>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- REFERENCE TABLE -->
+    <section id="reference">
+      <h2 class="sec">3상 380V 유도전동기 표준 권선·정격전류·차단기·케이블 조견표 (60Hz 4극 기준)</h2>
+      <p class="sub">국내 산업 현장에서 가장 널리 쓰이는 3상 380V 4극(1,750 RPM) 전폐외선형(TEFC) 유도전동기의 출력별 정격전류, 권장 배선용 차단기(MCCB), 전자접촉기(MC), EOCR 세팅과 F-CV 동력 케이블 굵기, 표준 슬롯 수·결선 참고표입니다. 실제 적용 시에는 전동기 명판과 케이블 제조사의 허용전류를 반드시 확인하세요.</p>
+      <div class="twrap">
+        <table>
+          <thead><tr><th>정격 출력 (kW / HP)</th><th>380V 정격전류 (In)</th><th>권장 MCCB (AT)</th><th>전자접촉기 (MC)</th><th>EOCR 세팅 범위</th><th>F-CV 케이블 (SQ)</th><th>표준 슬롯 수 / 결선</th></tr></thead>
+          <tbody>
+            <tr><td>0.75 kW (1 HP)</td><td>1.9 A</td><td>15 A</td><td>MC-9b</td><td>2.0 ~ 2.2 A</td><td>2.5 SQ</td><td>24 슬롯 / Y결선</td></tr>
+            <tr><td>1.5 kW (2 HP)</td><td>3.5 A</td><td>15 A</td><td>MC-9b</td><td>3.7 ~ 4.0 A</td><td>2.5 SQ</td><td>24 슬롯 / Y결선</td></tr>
+            <tr><td>2.2 kW (3 HP)</td><td>5.0 A</td><td>15 A ~ 20 A</td><td>MC-12b</td><td>5.3 ~ 5.8 A</td><td>2.5 SQ</td><td>36 슬롯 / Δ결선</td></tr>
+            <tr><td>3.7 kW (5 HP)</td><td>8.0 A</td><td>20 A</td><td>MC-18b</td><td>8.4 ~ 9.2 A</td><td>2.5 ~ 4.0 SQ</td><td>36 슬롯 / Δ결선</td></tr>
+            <tr><td>5.5 kW (7.5 HP)</td><td>11.5 A</td><td>30 A</td><td>MC-22b</td><td>12.1 ~ 13.2 A</td><td>4.0 SQ</td><td>36 슬롯 / Δ결선</td></tr>
+            <tr><td>7.5 kW (10 HP)</td><td>15.0 A</td><td>30 A ~ 40 A</td><td>MC-32a</td><td>15.8 ~ 17.3 A</td><td>4.0 ~ 6.0 SQ</td><td>48 슬롯 / Δ결선</td></tr>
+            <tr><td>11.0 kW (15 HP)</td><td>22.5 A</td><td>50 A</td><td>MC-40a (Y-Δ 권장)</td><td>23.6 ~ 25.8 A</td><td>6.0 ~ 10 SQ</td><td>48 슬롯 / Δ결선</td></tr>
+            <tr><td>15.0 kW (20 HP)</td><td>30.0 A</td><td>60 A</td><td>MC-50a (Y-Δ 기동)</td><td>31.5 ~ 34.5 A</td><td>10 SQ</td><td>48 슬롯 / Δ결선</td></tr>
+            <tr><td>22.0 kW (30 HP)</td><td>43.0 A</td><td>75 A ~ 100 A</td><td>MC-65a (Y-Δ 기동)</td><td>45.0 ~ 49.5 A</td><td>16 SQ</td><td>48 슬롯 / Δ결선</td></tr>
+            <tr><td>37.0 kW (50 HP)</td><td>71.0 A</td><td>125 A ~ 150 A</td><td>MC-100a (Y-Δ 기동)</td><td>74.5 ~ 81.5 A</td><td>25 ~ 35 SQ</td><td>60 슬롯 / Δ결선</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tnote">전류값은 표준 효율 4극 전동기(η ≈ 0.80~0.88, cos φ ≈ 0.82~0.86)의 대표값입니다. 고효율(IE3/IE4) 전동기나 극수가 다른 전동기는 값이 다소 달라질 수 있습니다.</p>
+      <div class="flowwrap">
+        <div class="flow">
+          <div class="fbox"><b>스테이터 슬롯 (Z)</b><small>절연지 + 에나멜 코일<br>점적률 42% ~ 55%</small></div>
+          <div class="farrow">→</div>
+          <div class="fbox"><b>전기자 유도 자속 (Φ)</b><small>E = 4.44 · f · N · Φ · kw</small></div>
+          <div class="farrow">→</div>
+          <div class="fbox"><b>출력 토크 및 효율 검증</b><small>절연저항 · 무부하전류<br>온도상승 한도 통과</small></div>
+        </div>
+        <p class="fcap">그림 1. 전동기 권선 설계 및 동력 보호협조 표준 프로세스 — KS/KEC 기술 기준 요약도</p>
+      </div>
+    </section>
+
+    <!-- GUIDES -->
+    <section id="guides">
+      <h2 class="sec">심층 실무 기술 가이드</h2>
+      <p class="sub">권선 설계부터 단상·3상 결선, 절연 시험, 베어링 관리까지 현장 엔지니어를 위한 전문 기술 매뉴얼입니다. 가이드를 열면 전문을 읽을 수 있습니다.</p>
+      <div id="guideGrid" class="ggrid"></div>
+      <div id="reader" class="panel">
+        <button class="backbtn" onclick="closeGuide()">← 전체 가이드</button>
+        <span class="tag" id="r_tag"></span>
+        <h2 id="r_title" style="margin:4px 0 12px;font-size:24px"></h2>
+        <div class="body" id="r_body"></div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <h2 class="sec">자주 묻는 질문</h2>
+      <p class="sub">권선 작업장에서 가장 자주 묻는 질문에 대한 빠른 답변입니다.</p>
+      <details><summary>코일당 턴수를 바꾸면 어떻게 되나요?</summary><p>턴수가 자속을 결정합니다. 원래 설계보다 턴수가 적으면 자속밀도가 올라가 전동기가 무부하전류를 더 끌어오고 과열됩니다. 턴수가 많으면 자속과 토크가 떨어집니다. 작은 변경(±5%)은 대개 허용되지만, 다른 전압용으로 의도적으로 재설계하는 경우가 아니라면 재권선은 원래 턴수와 일치시켜야 합니다.</p></details>
+      <details><summary>동선 전동기를 알루미늄선으로 재권선할 수 있나요?</summary><p>가능하지만 같은 직경으로는 안 됩니다. 알루미늄의 도전율은 동의 약 61%이므로 같은 저항을 얻으려면 단면적이 약 1.28배(직경 약 1.13배) 필요하고, 같은 슬롯에 넣기가 어렵습니다. 슬롯 공간이 빠듯한 재권선에서는 동선이 표준 선택입니다.</p></details>
+      <details><summary>어느 크기부터 스타-델타 기동을 써야 하나요?</summary><p>경험칙으로는 약 11kW(15HP) 이상부터, 또는 직입 기동 시 전압 강하가 다른 장비를 방해할 정도일 때입니다. 정확한 기준은 변압기 용량과 전원 임피던스에 따라 달라지니, 결정 전에 위 전압강하 계산기로 기동 시 전압강하를 확인하세요.</p></details>
+      <details><summary>단상 전동기의 운전 콘덴서는 어떻게 선정하나요?</summary><p>단상 220V 60Hz 기준 약 58 µF/kW가 일반적인 출발점입니다. 이후 보조권선 전류를 측정해 미세 조정하세요. 부하 상태에서 주권선과 보조권선 전류가 대략 같아지는 용량이 적정값입니다. 위 콘덴서 계산기로 추정값을 구하고, 반드시 전동기용 연속 정격에 맞는 전압의 콘덴서를 사용하세요.</p></details>
+      <details><summary>전동기에서 전압강하가 왜 중요한가요?</summary><p>전동기 토크는 전압의 제곱에 비례해 떨어지므로, 전압이 10% 떨어지면 기동토크가 약 19% 사라져 부하가 걸린 펌프나 압축기가 기동 중에 멈출 수 있습니다. 긴 케이블은 열로 에너지를 낭비하기도 합니다. 전압강하를 5% 이내로 유지하면 기동 성능과 효율을 지킬 수 있습니다.</p></details>
+      <details><summary>재권선 시 슬롯 점적률은 어느 정도가 적당한가요?</summary><p>대략 35~55%를 목표로 하세요. 그보다 낮으면 슬롯 공간과 동선 성능을 낭비하고, 높으면 에나멜 절연을 손상시키지 않고 코일을 넣기가 매우 어려워지며 열이 빠져나갈 공간도 줄어듭니다.</p></details>
+      <details><summary>계산기에 쓰려고 HP를 kW로 어떻게 환산하나요?</summary><p>마력에 0.746을 곱하세요. 예를 들어 5HP ≈ 3.7kW, 10HP ≈ 7.5kW입니다. 위 조견표에는 흔한 전동기 크기별로 kW와 HP를 함께 표기했습니다.</p></details>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="panel">
+        <h2 class="sec">MotorWinding Hubs 소개</h2>
+        <p>MotorWinding Hubs는 전동기 재권선(리와인딩) 작업장, 유지보수 전기기술자, 전기공학 학생을 위한 무료 기술 자료 사이트입니다. 계산기는 3상 380V·단상 220V, 60Hz 계통의 표준 공식을 사용합니다. 회전기에 대해서는 KS C IEC 60034를 따르고, 동 저항률과 온도계수 등 전기공학 실무에서 통용되는 값을 적용했습니다.</p>
+        <p><strong>면책 조항:</strong> 모든 결과는 안내용 추정치일 뿐이며, 전동기 제조사의 명판 데이터, 해당 국가의 전기설비규정(KEC), 자격 있는 전기기술자의 판단을 대신하지 않습니다. 어떤 기계에든 전원을 투입하기 전에 보호 장치 세팅, 케이블 굵기, 콘덴서 값을 장비 문서와 현지 규정으로 반드시 검증하세요. MotorWinding Hubs는 이 계산에 근거한 작업으로 발생한 결과에 대해 책임을 지지 않습니다.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ============ PRIVACY ============ -->
+<div class="wrap pageview" id="view-privacy">
+  <h1>개인정보처리방침</h1>
+  <p class="mut">최종 업데이트: 2026년 11월 21일</p>
+  <p>MotorWinding Hubs(motorwindinghubs.github.io)는 무료 계산기 및 기술 자료 웹사이트입니다. 본 방침은 이용 시 어떤 정보가 수집되고, 어떤 정보가 수집되지 않는지를 설명합니다.</p>
+  <h2>계산은 사용자의 기기 안에서만 수행됩니다</h2>
+  <p>5종의 계산기는 모두 웹 브라우저 안에서 JavaScript로 동작합니다. 입력한 값은 서버로 전송되거나 데이터베이스에 저장되거나 제3자와 공유되지 않습니다. 페이지를 닫으면 입력값은 사라집니다.</p>
+  <h2>회원가입이 없습니다</h2>
+  <p>본 사이트에는 회원가입, 로그인, 댓글, 업로드 기능이 없으며, 도구 이용을 위해 이름, 이메일 주소 등 개인정보를 요구하지 않습니다.</p>
+  <h2>쿠키와 광고</h2>
+  <p>본 사이트 자체는 추적 쿠키를 설정하지 않습니다. 향후 광고(예: Google AdSense)가 표시되는 경우, 광고 제공업체는 자체 개인정보처리방침에 따라 광고 게재 및 측정 목적으로 쿠키를 사용할 수 있습니다. 쿠키는 언제든 브라우저 설정에서 관리할 수 있습니다.</p>
+  <h2>방문 통계</h2>
+  <p>어떤 계산기가 많이 쓰이는지 파악하기 위해 익명의 집계 통계를 사용하는 경우에도, 개별 방문자를 식별하지 않으며 판매하지 않습니다.</p>
+  <h2>외부 링크</h2>
+  <p>페이지에는 제조사, 표준 기관, 기타 참고 사이트로 연결되는 링크가 포함될 수 있습니다. 외부 웹사이트의 개인정보 처리 방식에 대해서는 책임을 지지 않습니다.</p>
+  <h2>변경 및 문의</h2>
+  <p>사이트가 발전함에 따라 본 방침이 업데이트될 수 있으며, 현행 버전은 항상 이 페이지에 게시됩니다. 본 방침에 대한 문의는 문의 페이지를 통해 보내 주세요.</p>
+</div>
+
+<!-- ============ TERMS ============ -->
+<div class="wrap pageview" id="view-terms">
+  <h1>이용약관</h1>
+  <p class="mut">최종 업데이트: 2026년 11월 21일</p>
+  <p>MotorWinding Hubs를 이용하시면 본 약관에 동의한 것으로 봅니다.</p>
+  <h2>추정치 고지</h2>
+  <p>본 사이트의 모든 계산 결과, 표의 값, 가이드는 일반 안내와 교육 목적의 추정치입니다. 결과는 입력값의 정확도와 표준 가정(예: 직입 기동 시 기동전류 6배, 권선 허용전류 가이드 4 A/mm²)에 따라 달라지며, 사용 중인 기계와 일치하지 않을 수 있습니다.</p>
+  <h2>전문가 책임</h2>
+  <p>전기 작업은 전동기 제조사 문서, 장비 명판, 해당 국가의 전기설비규정에 따라 자격 있는 사람이 수행해야 합니다. 어떤 기계에든 전원을 투입하기 전에 보호 장치 세팅, 케이블 굵기, 콘덴서 값, 권선 데이터를 반드시 검증하세요. MotorWinding Hubs는 이 계산에 근거한 작업으로 발생한 손실, 손상, 부상에 대해 책임을 지지 않습니다.</p>
+  <h2>허용 사용</h2>
+  <p>계산기와 가이드는 개인 및 작업장 용도로 자유롭게 이용할 수 있습니다. 다만 본 사이트의 콘텐츠를 인증된 엔지니어링 데이터로 오인하게 하거나, 사이트 운영을 방해해서는 안 됩니다.</p>
+  <h2>콘텐츠와 변경</h2>
+  <p>공식과 참고 값을 정확하고 KS·IEC 실무에 맞게 유지하려고 노력하지만, 모든 값이 오류가 없거나 최신임을 보장하지는 않습니다. 콘텐츠는 예고 없이 변경될 수 있습니다.</p>
+</div>
+
+<!-- ============ CONTACT ============ -->
+<div class="wrap pageview" id="view-contact">
+  <h1>기술 문의</h1>
+  <p>공식이나 표의 값에서 오류를 발견하셨나요? 새 계산기나 가이드에 대한 제안이 있으신가요? 현장 권선 기술자와 전기기술자 여러분의 정확한 피드백이 이 자료 사이트를 유용하게 유지합니다.</p>
+  <h2>연락 방법</h2>
+  <p>이메일: <a href="mailto:contact@motorwindinghubs.github.io">contact@motorwindinghubs.github.io</a></p>
+  <p class="mut">계산기 이름, 입력한 값, 예상했던 결과를 함께 적어 보내 주시면 빠르게 재현하고 확인할 수 있습니다. 모든 메시지를 읽고 있지만, 소규모 무료 프로젝트이므로 개별 전동기 설계나 고장 진단 상담은 제공하지 않습니다. 기계별 상담은 전동기 제조사나 자격 있는 전기기술자에게 문의해 주세요.</p>
+  <h2>정정 정책</h2>
+  <p>공식, 표, 가이드에서 확인된 오류는 다음 사이트 업데이트에서 정정되며, 중요한 정정은 해당 페이지에 표기합니다.</p>
+</div>
+
+<!-- ============ ABOUT PAGE ============ -->
+<div class="wrap pageview" id="view-about">
+  <h1>MotorWinding Hubs 소개</h1>
+  <p>MotorWinding Hubs는 전동기 재권선(리와인딩) 작업장, 유지보수 전기기술자, 전기공학 학생을 위한 무료 기술 자료 사이트입니다. 권선 턴수와 동선 중량, 선 규격 변환, 전류와 보호 장치 선정, 콘덴서 선정과 역률 개선, 전압강하와 간선 굵기 선정까지 — 권선 작업장이 매일 찾는 계산을 작업대 앞의 휴대폰에서도 빠르게 쓸 수 있는 한 페이지에 모았습니다.</p>
+  <h2>표준과 계산 방법</h2>
+  <p>계산기는 3상 380V·단상 220V, 60Hz 계통의 표준 공식을 사용합니다. 회전기는 KS C IEC 60034, 동 저항률 1.68×10⁻⁸ Ω·m, 온도계수 0.00393/°C를 적용하고, 스타-델타 기동은 약 11kW부터, 단상 운전 콘덴서는 220V 기준 약 58 µF/kW와 같은 통용 경험칙을 각 계산기에 명시해 모든 결과가 어떻게 산출되었는지 확인할 수 있게 했습니다.</p>
+  <h2>이용 대상</h2>
+  <p>선재 주문 전에 중량을 추정하는 재권선 작업장, 차단기·접촉기·케이블을 선정하는 현장 전기기술자, 권선 데이터와 전류·보호 협조가 어떻게 맞물리는지 배우는 학생을 위한 사이트입니다.</p>
+  <p><strong>면책 조항:</strong> 모든 결과는 안내용 추정치일 뿐이며, 제조사 명판 데이터, 국가 전기설비규정, 자격 있는 전기기술자의 판단을 대신하지 않습니다.</p>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <h4>MotorWinding Hubs</h4>
+        <p>재권선 작업장과 현장 전기기술자를 위한 무료 전동기 권선·전기 엔지니어링 계산기. KS C IEC 60034 기준 · 3상 380V · 단상 220V · 60Hz.</p>
+        <p>motorwindinghubs.github.io</p>
+      </div>
+      <div>
+        <h4>계산기</h4>
+        <a href="#calculators" onclick="go('home')">권선 턴수·동선 중량</a>
+        <a href="#calculators" onclick="go('home')">SWG·AWG·SQ 변환</a>
+        <a href="#calculators" onclick="go('home')">3상 전류·차단기</a>
+        <a href="#calculators" onclick="go('home')">콘덴서·역률</a>
+        <a href="#calculators" onclick="go('home')">KEC 전압강하·간선</a>
+      </div>
+      <div>
+        <h4>사이트</h4>
+        <a href="#" onclick="go('privacy');return false;">개인정보처리방침</a>
+        <a href="#" onclick="go('terms');return false;">이용약관</a>
+        <a href="#" onclick="go('about');return false;">소개</a>
+        <a href="#" onclick="go('contact');return false;">기술 문의</a>
+        <a href="#faq" onclick="go('home')">자주 묻는 질문</a>
+      </div>
+    </div>
+    <div class="fbot">© 2026 MotorWinding Hubs · 모든 계산은 브라우저 안에서 로컬로 수행됩니다 · 결과는 추정치입니다 — 제조사 데이터와 전기설비규정(KEC)으로 검증하세요.</div>
+  </div>
+</footer>
+
+<script>
+var $=function(id){return document.getElementById(id)};
+function fmt(n,d){if(!isFinite(n))return"—";return n.toLocaleString('ko-KR',{minimumFractionDigits:d,maximumFractionDigits:d})}
+function num(id){var v=parseFloat($(id).value);return isNaN(v)?0:v}
+function go(view){
+  ['home','privacy','terms','contact','about'].forEach(function(v){ $('view-'+v).style.display = (v===view)?'block':'none'; });
+  $('nav').classList.remove('open');
+  window.scrollTo({top:0});
+}
+$('burger').addEventListener('click',function(){ $('nav').classList.toggle('open'); });
+
+/* ---------- 1. Winding ---------- */
+var PRESETS={
+  p1:{slots:24,L:65,W:62,d:0.70,turns:34,area:55},
+  p2:{slots:36,L:115,W:88,d:0.95,turns:48,area:92},
+  p3:{slots:36,L:140,W:105,d:1.10,turns:30,area:110},
+  p4:{slots:48,L:170,W:125,d:1.20,turns:22,area:130}
+};
+function applyPreset(){
+  var p=PRESETS[$('w_preset').value]; if(!p)return;
+  $('w_slots').value=p.slots; $('w_L').value=p.L; $('w_W').value=p.W;
+  $('w_d').value=p.d; $('w_turns').value=p.turns; $('w_slotarea').value=p.area;
+}
+function calcWinding(){
+  var slots=num('w_slots'),L=num('w_L'),W=num('w_W'),d=num('w_d'),turns=num('w_turns'),slotArea=num('w_slotarea'),price=num('w_price');
+  var mat=$('w_mat').value;
+  var rho = mat==='cu'?1.68e-8:2.82e-8, dens = mat==='cu'?8960:2700, alpha= mat==='cu'?0.00393:0.00403;
+  if(slots<=0||L<=0||W<=0||d<=0||turns<=0){return}
+  var mtl_m = 2*(L+W)/1000;
+  var totalLen = slots*turns*mtl_m;
+  var coilLen = turns*mtl_m;
+  var area_m2 = Math.PI*Math.pow(d/1000,2)/4;
+  var area_mm2 = Math.PI*d*d/4;
+  var weight = totalLen*area_m2*dens*1.05;
+  var r20 = rho*coilLen/area_m2;
+  var r75 = r20*(1+alpha*(75-20));
+  var fill = slotArea>0 ? (turns*area_mm2/slotArea*100) : 0;
+  $('w_mtl').textContent = fmt(mtl_m*1000,0)+' mm';
+  $('w_len').textContent = fmt(totalLen,1)+' m';
+  $('w_wt').textContent = fmt(weight,2)+' kg';
+  $('w_r20').textContent = fmt(r20,2)+' Ω';
+  $('w_r75').textContent = fmt(r75,2)+' Ω';
+  $('w_fill').textContent = fmt(fill,1)+' %';
+  $('w_cost').textContent = fmt(weight*price,0)+' 원';
+  $('w_res').classList.add('show');
+}
+/* ---------- 2. Gauge ---------- */
+var SWG=[8.23,7.62,7.01,6.35,5.89,5.38,4.88,4.47,4.06,3.66,3.25,2.95,2.64,2.34,2.03,1.83,1.63,1.42,1.22,1.02,0.91,0.81,0.71,0.61,0.56,0.51,0.46,0.42,0.38,0.35,0.32,0.29,0.27,0.25,0.23,0.21,0.19,0.17,0.15,0.13,0.12,0.11,0.10,0.09,0.08,0.07,0.06,0.05,0.04,0.03,0.025];
+function nearestSWG(d){var best=0,bd=1e9;SWG.forEach(function(v,i){var diff=Math.abs(v-d);if(diff<bd){bd=diff;best=i}});return best}
+function calcGauge(){
+  var type=$('g_type').value, val=num('g_val'); if(val<=0)return;
+  var d;
+  if(type==='swg'){ var i=Math.round(val); if(i<0||i>50)return; d=SWG[i]; }
+  else if(type==='awg'){ d=0.127*Math.pow(92,(36-val)/39); }
+  else if(type==='mm'){ d=val; }
+  else { d=2*Math.sqrt(val/Math.PI); }
+  var area=Math.PI*d*d/4;
+  var awg=36-39*(Math.log(d/0.127)/Math.log(92));
+  var rkm=1.68e-8/(area*1e-6)*1000;
+  $('g_swg').textContent=nearestSWG(d);
+  $('g_awg').textContent=fmt(Math.round(awg*10)/10,1);
+  $('g_mm').textContent=fmt(d,3)+' mm';
+  $('g_mm2').textContent=fmt(area,3)+' mm²';
+  $('g_r').textContent=fmt(rkm,2)+' Ω/km';
+  $('g_i').textContent='≈ '+fmt(area*4,1)+' A';
+  $('g_res').classList.add('show');
+}
+/* ---------- 3. Motor ---------- */
+function nextStd(v,list){for(var i=0;i<list.length;i++){if(list[i]>=v)return list[i]}return list[list.length-1]}
+function calcMotor(){
+  var kw=num('m_kw'),V=num('m_v'),eff=num('m_eff')/100,pf=num('m_pf');
+  var sup=$('m_v').value; var is3 = (sup!=='220');
+  if(kw<=0||eff<=0||pf<=0)return;
+  var In = is3 ? kw*1000/(Math.sqrt(3)*V*eff*pf) : kw*1000/(V*eff*pf);
+  $('m_in').textContent=fmt(In,1)+' A';
+  $('m_start').textContent=fmt(In*6,0)+' A';
+  $('m_mccb').textContent=nextStd(In*1.25,[6,10,16,20,25,32,40,50,63,80,100,125,160,200,250])+' A';
+  $('m_cont').textContent=nextStd(In,[9,12,18,25,32,40,50,65,80,95,115,150,185,225])+' A';
+  $('m_eocr').textContent=fmt(In*1.05,1)+' ~ '+fmt(In*1.15,1)+' A';
+  $('m_pin').textContent=fmt(kw/eff,2)+' kW';
+  $('m_res').classList.add('show');
+}
+/* ---------- 4. Capacitor ---------- */
+function calcCap(){
+  var kw1=num('c_kw1'),kw3=num('c_kw3'),pf1=num('c_pf1'),pf2=num('c_pf2');
+  var run=kw1*58;
+  var kvar=kw3*(Math.tan(Math.acos(pf1))-Math.tan(Math.acos(pf2)));
+  if(kvar<0)kvar=0;
+  var cur=kw3*1000/(Math.sqrt(3)*380*pf1);
+  $('c_run').textContent=fmt(run,0)+' µF';
+  $('c_start').textContent=fmt(run*2.5,0)+' ~ '+fmt(run*3,0)+' µF';
+  $('c_kvar').textContent=fmt(kvar,2)+' kVAr';
+  $('c_ang1').textContent=fmt(Math.acos(pf1)*180/Math.PI,1)+'°';
+  $('c_ang2').textContent=fmt(Math.acos(pf2)*180/Math.PI,1)+'°';
+  $('c_cur').textContent=fmt(cur,1)+' A';
+  $('c_res').classList.add('show');
+}
+/* ---------- 5. Voltage drop ---------- */
+function calcDrop(){
+  var len=num('v_len'),I=num('v_i'),size=parseFloat($('v_size').value);
+  var parts=$('v_sup').value.split('-'); var V=parseFloat(parts[0]), ph=parts[1];
+  if(len<=0||I<=0)return;
+  function dropFor(s){var R=0.0175*len/s; return ph==='3'? Math.sqrt(3)*I*R : 2*I*R;}
+  var dv=dropFor(size), pct=dv/V*100, R=0.0175*len/size;
+  var sizes=[1.5,2.5,4,6,10,16,25,35,50,70,95,120], sugg='120 SQ 초과';
+  for(var i=0;i<sizes.length;i++){ if(dropFor(sizes[i])/V*100<=5){sugg=sizes[i]+' SQ';break} }
+  var loss = ph==='3'? Math.sqrt(3)*dv*I : dv*I;
+  $('v_dv').textContent=fmt(dv,2)+' V';
+  $('v_pct').innerHTML='<span class="'+(pct<=5?'ok':'warn')+'">'+fmt(pct,2)+' %</span>';
+  $('v_vload').textContent=fmt(V-dv,1)+' V';
+  $('v_r').textContent=fmt(R,3)+' Ω';
+  $('v_sugg').textContent=sugg;
+  $('v_loss').textContent=fmt(loss,0)+' W';
+  $('v_verdict').innerHTML = pct<=5 ? '<span class="ok">✓ 전압강하 5% 이내</span> — 전압강하 기준으로는 적합한 굵기입니다(케이블 허용전류는 별도로 확인하세요).' : '<span class="warn">✗ 전압강하 5% 초과</span> — 최소 '+sugg+' 이상으로 굵기를 올리거나 배선 거리를 줄이세요.';
+  $('v_res').classList.add('show');
+}
+/* ---------- Guides ---------- */
+var GUIDES=[
+ {tag:"권선 설계",title:"스테이터 권선 설계의 기본",short:"코일을 풀기 전에 슬롯, 극수, 코일 수부터 세고, 상별 원래 턴수, 선경, 결선(스타/델타)을 기록하세요. 코일당 턴수가 자속을 결정합니다. 턴수가 적으면 무부하전류가 늘고 과열되며, 많으면 토크가 떨어집니다. 슬롯 점적률은 대략 35~55% 사이를 유지해야 에나멜을 손상시키지 않고 코일을 넣을 수 있습니다.",body:["탄 스테이터를 풀기 전에 증거물처럼 다루세요. 전체 슬롯 수를 세고, 코일 그룹으로 극수를 파악한 뒤, 상마다 코일이 몇 개인지 확인합니다. 에나멜을 긁어낸 뒤 마이크로미터로 원래 선경을 측정하고, 최소 두 개 코일의 턴수를 기록하세요. 탄 코일은 턴수가 소실될 수 있으니 깨끗한 코일을 두 번 세는 것이 안전합니다.","발견한 결선을 그대로 기록하세요. 스타인지 델타인지, 그룹 내 코일이 직렬인지 병렬인지 확인합니다. 델타로 잘못 재결선한 전동기는 같은 전원에서 상전압이 √3배가 걸려 금세 다시 탑니다.","코일당 턴수가 코어의 자속을 결정합니다. 턴수가 부족하면 자속밀도가 포화 쪽으로 올라가 무부하전류가 커지고 철심이 뜨거워지며 효율이 떨어집니다. 턴수가 과하면 자속이 약해져 토크가 줄고 부하 시 슬립이 커집니다. 전압 변경을 목적으로 재설계하는 경우가 아니라면 원래 턴수와 선경 그대로 재권선하세요.","슬롯 점적률은 대략 35~55%를 유지하세요. 그보다 낮으면 슬롯 공간을 낭비하고, 높으면 코일을 억지로 밀어 넣어야 해서 에나멜 손상 가능성이 커집니다. 원래 선경·턴수대로 들어가지 않는다면 대개 기록이 잘못된 것이니, 임의로 바꾸기 전에 다시 세어 보세요.","마지막으로 완성 코일 1개를 달아 위 계산기의 추정치와 비교하세요. 작은 차이는 엔드턴 여유로 설명되지만, 큰 차이는 어딘가에서 세는 실수가 있었다는 뜻입니다."]},
+ {tag:"단상 전동기",title:"단상 전동기 콘덴서 결선",short:"단상 전동기는 회전 자계를 만들기 위해 보조권선과 콘덴서가 필요합니다. 먼저 멀티미터로 주권선과 보조권선을 구분하세요. 보조권선이 보통 저항이 더 큽니다. 운전 콘덴서는 보조권선과 상시 직렬로 연결하고, 기동 콘덴서(있는 경우)는 원심 스위치를 통해 연결되어 전동기가 정격 속도의 약 75%에 도달하면 떨어져 나가야 합니다.",body:["단상 스테이터는 혼자서는 기동할 수 없습니다. 주권선만으로는 회전 자계가 아닌 맥동 자계가 생기기 때문입니다. 슬롯에서 위치가 어긋난 보조(기동)권선에 콘덴서를 통해 전류를 흘리면 전류 위상이 이동하면서 회전자를 돌리는 회전 자계가 만들어집니다.","결선 전에 멀티미터로 권선부터 확인하세요. 보조권선은 더 가는 선으로 감겨 있어 보통 저항이 더 크고, 주권선은 저항이 더 낮게 읽힙니다. 오래된 전동기는 리드선 색상만 믿지 말고 저항 측정으로 단자를 확인하세요.","운전 콘덴서는 보조권선과 상시 직렬로 연결되며 연속 정격이어야 합니다. 단상 220V 60Hz 기준 약 58 µF/kW가 추정의 출발점입니다. 기동 콘덴서가 있는 경우 훨씬 큰 전해 콘덴서를 원심 스위치를 통해 연결하며, 정격 속도의 약 75%에서 반드시 떨어져야 하고, 그렇지 않으면 과열되어 파손됩니다.","전동기가 웅웅거리기만 하고 기동하지 못하면 기동 콘덴서나 원심 스위치 불량을 의심하세요. 기동은 되는데 과열되고 전류가 과하면 운전 콘덴서 용량이나 보조권선 단락을 의심해야 합니다. 콘덴서 교체 시에는 같은 용량에 동등 이상의 교류 전압 정격(전동기용)을 사용하세요."]},
+ {tag:"기동 방식",title:"스타-델타(Y-Δ) 기동",short:"전원이 약한 현장에서 약 11kW 이상 전동기는 스타-델타 기동으로 기동전류를 직입 기동의 약 1/3로 줄일 수 있습니다. 스타로 기동한 뒤 타이머가 몇 초 후 델타로 전환합니다. 사용 전압에서 델타 전용으로 명판에 표시된 전동기에는 절대 사용하지 말고, 전환 타이머는 전동기가 거의 정격 속도에 도달한 뒤 동작하도록 설정하세요.",body:["직입 기동은 정격전류의 6~8배를 끌어옵니다. 전원이 약하면 그 순간 전압이 처져 조명이 깜빡이고, 접촉기가 떨어지고, 다른 장비가 오동작할 수 있습니다. 스타-델타 기동은 먼저 권선을 스타로 연결해 각 권선에 선간전압의 1/√3만 걸리게 하므로, 기동전류와 기동토크가 모두 직입의 약 1/3로 줄어듭니다.","스타터는 주접촉기, 스타 접촉기, 델타 접촉기 3개와, 스타와 델타가 동시에 투입되지 않도록 하는 전기적·기계적 인터록, 그리고 전동기가 거의 정격 속도에 도달한 몇 초 뒤에 전환하는 타이머로 구성됩니다. 전동기가 아직 느릴 때 너무 일찍 전환하면 직입에 가까운 두 번째 전류 서지가 발생합니다.","스타-델타 기동은 전동기의 델타 정격이 사용 전압과 일치할 때만 가능합니다. 380V 계통에서는 명판이 380V Δ / 660V Y로 표시되어야 하고, 권선 끝 6가닥이 모두 단자함에 나와 있어야 합니다. 220V Δ / 380V Y로 표시된 전동기는 380V에서 스타로만 운전해야 하며, 그 전원에서 스타-델타 기동을 할 수 없습니다.","과부하 계전기(EOCR)의 세팅은 회로 내 위치에 따라 달라집니다. 많은 스타터에서 쓰이는 델타 루프 배선에서는 상전류(선전류의 0.58배)가 흐르므로 명판 전류의 0.58배로 설정합니다. 이 값을 틀리면 불필요한 트립이 반복되거나, 반대로 보호가 전혀 되지 않는 흔한 원인이 됩니다."]},
+ {tag:"시험·진단",title:"절연저항 시험(메거 테스트)",short:"재권선한 전동기에 전원을 넣기 전에 저압 전동기는 500V 메거로(대형기는 1,000V) 권선과 프레임 사이 절연저항을 측정하세요. 건조하고 건강한 권선은 상온에서 100MΩ을 훨씬 넘습니다. 1~2MΩ 이하이면 건조하거나 원인을 조사해야 합니다. 시험 후에는 반드시 권선을 방전하고, 권선 온도와 함께 측정값을 기록하세요.",body:["절연 시험은 권선 작업대와 전원 사이의 관문입니다. 저압 전동기는 500V 절연저항계(메거)로, 대형기는 1,000V로 각 권선과 프레임 사이, 권선 상호 간을 측정하세요. 전자기기, 콘덴서, 서지 보호기는 시험 전압에 파손되므로 먼저 분리합니다.","건조하고 건강한 저압 권선은 상온에서 100MΩ을 훨씬 넘게 읽히며, 새로 재권선한 권선은 그보다 훨씬 높아야 합니다. 측정값은 온도에 크게 좌우됩니다. 절연저항은 온도가 10°C 오를 때마다 대략 절반이 되므로, 나중에 비교할 수 있도록 반드시 권선 온도와 함께 기록하세요.","1~2MΩ 이하이면 전원을 넣기 전에 원인을 조사하세요. 습한 작업장에 방치되었거나 세척한 전동기에서는 습기가 가장 흔한 원인입니다. 80~110°C 오븐에서 건조하거나 코일에 저전압 전류를 흘려 건조한 뒤, 식으면서 다시 측정하세요. 건조될수록 측정값이 오르면 습기가 원인이었다는 증거입니다.","매 시험 후에는 전압을 인가한 시간 이상 권선을 프레임에 방전하세요. 충전된 권선은 감전될 만큼의 에너지를 품고 있고, 다음 측정값을 틀어지게도 합니다."]},
+ {tag:"인버터·구동",title:"VFD(인버터)와 절연 스트레스",short:"가변속 드라이브는 초당 수천 번 전압을 스위칭하며, 빠른 전압 상승은 각 코일의 첫 턴 절연을 가혹하게 합니다. 특히 오래된 전동기와 긴 케이블에서 그렇습니다. 인버터 정격 에나멜선을 쓰고, 모터 케이블을 짧게 유지하며, 케이블이 20~30m를 넘으면 dv/dt 필터나 출력 리액터를 검토하세요. 저속에서는 축 팬의 풍량이 줄어드니 온도를 주시하세요.",body:["가변속 드라이브는 깨끗한 정현파를 만들지 않습니다. DC 버스를 초당 수천 번 스위칭하고, 각 펄스는 모터 케이블을 타고 전파되어 모터 단자에서 부분적으로 반사됩니다. 케이블이 길면 반사파가 겹쳐 첫 코일의 첫 턴에 거의 두 배의 전압이 걸릴 수 있는데, VFD 구동 전동기가 보통 바로 거기서 고장 납니다.","드라이브로 구동할 전동기를 재권선할 때는 인버터 정격(코로나 내성) 에나멜선을 쓰고, 첫 코일 절연과 상간 절연지를 보강하며, 가능하면 진공함침(VPI)을 하세요. 재권선 시점에 비용은 적게 들지만 PWM 전원에서 권선 수명이 크게 늘어납니다.","모터 케이블은 실용적인 범위에서 최대한 짧게 유지하세요. 대략 20~30m를 넘으면 드라이브 출력에 dv/dt 필터나 출력 리액터를 설치해 펄스 상승을 완만하게 하세요. 드라이브의 스위칭 주파수와 모터 파라미터(정격전류, 열 모델)를 정확히 설정하고, 모터 열보호 기능도 활성화하세요.","냉각을 잊지 마세요. 축 팬의 풍량은 속도에 비례합니다. 드라이브로 저속에서 무거운 부하를 유지하면 정격전류에서도 과열될 수 있으니, 저속 정토크 운전에는 별도 전원의 냉각 팬을 달고 권선 온도를 감시하세요."]},
+ {tag:"유지보수",title:"베어링 관리와 그리스 주입",short:"전동기 고장의 절반 이상은 베어링에서 시작됩니다. 거칠거나 으르렁거리는 소리가 나는지 듣고, 과도한 진동이 있는지 확인하며, 운전 중 베어링 하우징 온도를 손으로 느껴 보세요. 그리스는 규격품만 아껴서 주입하세요. 과주입도 건조 운전만큼 확실히 베어링을 과열시킵니다. 베어링은 쌍으로 교체하고, 새 베어링을 외륜을 통해 망치로 쳐서 축에 넣지 마세요.",body:["업계 조사에서는 전동기 고장의 절반 이상이 베어링에서 비롯된다고 일관되게 보고합니다. 다행히 베어링은 일찍 신호를 보냅니다. 거칠거나 으르렁거리거나 휘파람 같은 소리, 진동 상승, 그리고 전동기 반대쪽 끝보다 뜨거운 베어링 하우징입니다.","그리스는 채우는 것이 아니라 정량을 투여하는 것입니다. 재주입형 베어링에는 규격된 종류와 양만 넣으세요. 과주입하면 교반되어 과열되고 씰이 터지며, 건조 운전만큼 확실하게 베어링을 망가뜨립니다. 권선으로 흘러든 여분 그리스는 절연 노화를 앞당깁니다. 제조사가 호환성을 확인하지 않는 한 그리스 종류(예: 리튬계와 폴리우레아계)를 섞지 마세요.","베어링을 교체할 때는 쌍으로 교체하고, 내륜만 눌러 압입하거나 가열해 끼우며, 외륜을 통해 망치질을 해 축에 넣지 마세요. 충격이 궤도면에 압흔(브리넬링)을 남겨 새 베어링이 처음부터 손상된 상태로 출발합니다.","주문 전에 옛 베어링의 번호(예: 6205-2Z, 6308-C3)를 기록하세요. 전동기는 열팽창과 끼워맞춤을 고려해 내부 틈새 C3이 필요한 경우가 많습니다. C3이 지정된 자리에 일반 틈새 베어링을 끼우면 조기 소착의 원인이 됩니다."]}
+];
+function renderGuides(){
+  var h='';
+  GUIDES.forEach(function(g,i){
+    h+='<article class="gcard"><span class="tag">'+g.tag+'</span><h3>'+g.title+'</h3><p>'+g.short+'</p><button onclick="openGuide('+i+')">자세히 보기 →</button></article>';
+  });
+  $('guideGrid').innerHTML=h;
+}
+function openGuide(i){
+  var g=GUIDES[i];
+  $('r_tag').textContent=g.tag; $('r_title').textContent=g.title;
+  $('r_body').innerHTML=g.body.map(function(p){return '<p>'+p+'</p>'}).join('');
+  $('guideGrid').style.display='none'; $('reader').classList.add('show');
+  $('reader').scrollIntoView({behavior:'smooth'});
+}
+function closeGuide(){ $('reader').classList.remove('show'); $('guideGrid').style.display='grid'; }
+renderGuides();
+</script>
+</body>
+</html>
